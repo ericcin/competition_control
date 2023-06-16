@@ -33,18 +33,12 @@ class dataItemLockManager:
 
     #desbloqueio
     def unlock(self, data_item, transaction):
-        if data_item not in self.data_items:
-            raise ValueError("Invalid data item")
-
-        if data_item in self.exclusive_locks:
-            if self.exclusive_locks[data_item] == transaction:
-                del self.exclusive_locks[data_item]
-            else:
-                raise ValueError("Transaction does not hold an exclusive lock on the data item")
-        elif (data_item, transaction) in self.shared_locks:
-            self.shared_locks.remove((data_item, transaction))
+        if self.transaction_has_lock(transaction) == True:
+            del self.lock_register[self.array_position]
+            print('Dado ' +data_item + ' desbloqueado com sucesso pela ' + transaction + '!')
         else:
-            raise ValueError("Transaction does not hold a lock on the data item")
+            print('A ' + transaction + ' não pode realizar desbloqueio no dado ' + data_item + ' pois ela não possui'
+                                                                                            'bloqueio sobre o dado!' )
 
     def create_lock_register(self, data_item, lock, number_of_locks, transaction):
         self.lock_register.append([data_item, lock, number_of_locks, [transaction]])
@@ -52,6 +46,14 @@ class dataItemLockManager:
     def alter_lock_register(self, transaction):
         self.lock_register[self.array_position][2] = self.lock_register[self.array_position][2] + 1
         self.lock_register[self.array_position][3].append(transaction)
+
+    def transaction_has_lock(self, transaction):
+        for pos, i in enumerate(self.lock_register):
+            if transaction in i:
+                self.array_position = pos
+                return True
+            else:
+                return False
 
     def has_shared_lock(self, data_item):
         for pos, i in enumerate(self.lock_register):

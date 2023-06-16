@@ -11,21 +11,38 @@
 # if item_teste not in meu_dicionario:
 #     print(item_teste+' nao esta no dicionario')
 
-lista = [['x', 'read_lock', 1, ['transacao1']]]
+#testes2
+# lista = [['x', 'read_lock', 1, ['transacao1']]]
+#
+# lista[0][3].append('transacao2')
+#
+# print(str(lista[0])+'essas')
+#
+# lista.append(['z', 'write_lock', 1, ['transacao3']])
+#
+# if 'transacao2' in lista[0][3]:
+#     print('OK')
+#
+# for i in lista:
+#     print(i)
+#     if 'x' in i and 'read_lock' in i:
+#         print('X ESTA NA LISTA')
+# #
+# # if'x' in lista:
+# #     print('X EM LISTA')
+# print("LISTA ANTES DO DEL")
+# print(lista)
+# del lista[0]
+# print("DEL FEITO")
+# print(lista)
 
-lista[0][3].append('transacao2')
+#testes 3
+lista = []
 
-print(str(lista[0])+'essas')
+print(lista)
 
-lista.append(['z', 'write_lock', 1, ['transacao3']])
-
-if 'transacao2' in lista[0][3]:
-    print('OK')
+if lista == []:
+    print('s')
 
 for i in lista:
     print(i)
-    if 'x' in i and 'read_lock' in i:
-        print('X ESTA NA LISTA')
-#
-# if'x' in lista:
-#     print('X EM LISTA')
