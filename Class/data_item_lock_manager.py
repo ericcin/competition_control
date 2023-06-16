@@ -8,14 +8,11 @@ class dataItemLockManager:
 
     # lock compartilhado
     def read_lock(self, data_item, transaction):
-        has_shared_lock_answer = self.has_shared_lock(data_item)
-        has_exclusive_lock_answer = self.has_exclusive_lock(data_item)
-
-        if has_exclusive_lock_answer == True:
+        if self.has_exclusive_lock(data_item) == True:
             #TODO essa parte talvez seja interessante eu mostrar quem está com bloqueio exclusivo no item
             print("Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo!")
         else:
-            if has_shared_lock_answer == False:
+            if self.has_shared_lock(data_item) == False:
                 self.create_lock_register(data_item, 'read_lock', 1, transaction)
                 print('Lock compartilhado em ' + data_item + ' realizado! Total de itens compartilhando item de dado: 1')
             else:
@@ -23,28 +20,16 @@ class dataItemLockManager:
 
     #lock exclusivo
     def write_lock(self, data_item, transaction):
-        has_shared_lock_answer = self.has_shared_lock(data_item)
-        has_exclusive_lock_answer = self.has_exclusive_lock(data_item)
-
-        if has_shared_lock_answer == True:
+        if self.has_shared_lock(data_item) == True:
             #TODO essa parte talvez seja interessante eu mostrar quem está com bloqueio compartilhado no item
             print("Impossível realizar lock exclusivo em " +data_item+ " pois ele possui bloqueio compartilhado pelas "
                                                 "transações: " + str(self.lock_register[self.array_position][3]))
         else:
-            if has_exclusive_lock_answer == False:
+            if self.has_exclusive_lock(data_item) == False:
                 self.create_lock_register(data_item, 'write_lock', 1, transaction)
                 print('Lock exclusivo em ' + data_item + ' realizado pela ' + transaction + '!')
             else:
                 print(self.check_transaction_in_write_lock(data_item, transaction))
-
-        # if data_item not in self.data_items:
-        #     print("Invalid data item")
-        #
-        # if data_item in self.registro_lock:
-        #     return("Wait")
-        # else:
-        #     self.exclusive_locks[data_item] = transaction
-        #     return("Ok")
 
     #desbloqueio
     def unlock(self, data_item, transaction):
@@ -69,10 +54,20 @@ class dataItemLockManager:
         self.lock_register[self.array_position][3].append(transaction)
 
     def has_shared_lock(self, data_item):
-        pass
+        for pos, i in enumerate(self.lock_register):
+            if data_item in i and 'read_lock' in i:
+                self.array_position = pos
+                return True
+            else:
+                return False
 
     def has_exclusive_lock(self, data_item):
-        return data_item in self.exclusive_locks
+        for pos, i in enumerate(self.lock_register):
+            if data_item in i and 'write_lock' in i:
+                self.array_position = pos
+                return True
+            else:
+                return False
 
     def check_transaction_in_read_lock(self, data_item, transaction):
         if transaction not in self.lock_register[self.array_position][3]:
@@ -88,32 +83,6 @@ class dataItemLockManager:
         else:
             return ('Impossível realizar Lock exclusivo em ' + data_item + ' pois ele já possui lock exclusivo realizado'
                                                             ' pela ' + str(self.lock_register[self.array_position][3]))
-
-    # def has_shared_lock(self, data_item):
-    #     return any(item == data_item for item, _ in self.shared_locks)
-
-    # def list_locks(self, data_item):
-    #     locks = []
-    #     if data_item in self.exclusive_locks:
-    #         locks.append(('Exclusive', self.exclusive_locks[data_item]))
-    #     for item, transaction in self.shared_locks:
-    #         if item == data_item:
-    #             locks.append(('Shared', transaction))
-    #     return locks
-
-    # def get_lock_status(self, data_item, transaction):
-    #     if data_item not in self.data_items:
-    #         raise ValueError("Invalid data item")
-    #
-    #     if data_item in self.exclusive_locks:
-    #         if self.exclusive_locks[data_item] == transaction:
-    #             return "E"
-    #         else:
-    #             return " "
-    #     elif any(item == data_item for item, _ in self.shared_locks):
-    #         return "S"
-    #     else:
-    #         return " "
 
     def read_item(self, item):
         pass
