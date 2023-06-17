@@ -6,6 +6,10 @@ class dataItemLockManager:
         self.lock_register = []
         self.array_position = None
 
+    def create_transaction_name(self):
+        self.count = self.count + 1
+        return 'transacao' + str(self.count)
+
     # lock compartilhado
     def read_lock(self, data_item, transaction):
         if self.has_exclusive_lock(data_item) == True:
@@ -86,8 +90,11 @@ class dataItemLockManager:
             return ('Impossível realizar Lock exclusivo em ' + data_item + ' pois ele já possui lock exclusivo realizado'
                                                             ' pela ' + str(self.lock_register[self.array_position][3]))
 
-    def read_item(self, item):
-        pass
+    #executadas após a da main
+    def read_item(self, item, data_item_lock_manager_items):
 
-    def write_item(self, item):
+        self.data_items[item] = data_item_lock_manager_items[item]
+        return self.data_items[item]
+
+    def write_item(self, lock_register, transaction, item):
         pass

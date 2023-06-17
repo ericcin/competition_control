@@ -1,9 +1,28 @@
+from Class.data_item_lock_manager import dataItemLockManager
+from Class.transacao import transacao
+
+data_item_lock_manager = dataItemLockManager
+
+def create_new_transaction():
+    name = data_item_lock_manager.create_transaction_name()
+    name = transacao
+
+def set_transaction_readed_item(item):
+    pass
+
+def set_transaction_writed_item(item):
+    pass
+
+
+
+
+#abaixo testes, acima código mesmo
 # chaves = ["a", "b", "c"]
 # meu_dicionario = {chave: 0 for chave in chaves}
 #
 # meu_dicionario['a'] = 1
 # print(meu_dicionario)
-#
+# #
 # print(meu_dicionario['a'])
 #
 # item_teste = 'c'
@@ -37,12 +56,12 @@
 # print(lista)
 
 #testes 3
-lista = []
-
-print(lista)
-
-if lista == []:
-    print('s')
-
-for i in lista:
-    print(i)
+# lista = []
+#
+# print(lista)
+#
+# if lista == []:
+#     print('s')
+#
+# for i in lista:
+#     print(i)
