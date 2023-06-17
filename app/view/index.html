@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Competition Controller</title>
+</head>
+<body>
+
+<div class="ui form">
+    <div class="ui container center aligned">
+        <div class="ui relaxed grid">
+
+            <div class="five column row">
+
+                <div class="column">
+                    <div class="field">
+                        <button class="ui green button"><i class="add icon"></i>Nova Transação</button>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="field">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="dado" id="dado">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Item de Dado</div>
+                            <div class="menu">
+                                <div class="item" data-value="x">X</div>
+                                <div class="item" data-value="y">Y</div>
+                                <div class="item" data-value="z">Z</div>
+                            </div>
+                        </div>
+                        <label for="dado">Item de Dado</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="transacao">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Transação</div>
+                            <div class="menu">
+                                <div class="item" data-value="t1">T1</div>
+                                <div class="item" data-value="t2">T2</div>
+                                <div class="item" data-value="t2">T3</div>
+                            </div>
+                        </div>
+                        <label>Transação</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="acoes">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Ações</div>
+                            <div class="menu">
+                                <div class="item" data-value="write_lock">Write Lock</div>
+                                <div class="item" data-value="read_lock">Read Lock</div>
+                            </div>
+                        </div>
+                        <label>Ações</label>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="field">
+                        <button class="ui blue button"><i class="play icon"></i>Realizar Ação</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="column row">
+                <div class="column">
+                    <div class="field">
+                        <label>Log</label>
+                        <textarea id="log"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+
+<link href="{{url_for('static', filename='css/semantic_ui/semantic.min.css')}}" rel="stylesheet">
+<script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+<script src="{{url_for('static', filename='css/semantic_ui/semantic.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/init.js')}}"></script>
+
+</html>
