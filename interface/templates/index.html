@@ -1,0 +1,63 @@
+<!doctype html>
+<html class="no-js" lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <title>Banco de Dados (IN9040) 2023.1, Projeto 2, Equipe 3: lgms, e, a @cin.ufpe.br - Controle de Concorrência</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title"
+    content="Banco de Dados (IN9040) 2023.1, Projeto 2, Equipe 3: lgms, eafs3, ajfs @cin.ufpe.br - Controle de Concorrência">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="{{url_for('static', filename='icon.png')}}">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="{{url_for('static', filename='css/normalize.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+  <div id="main-app" class="table-wrapper">
+    <div class="main-interaction-container">
+      <div class="main-interaction-row">
+        <button id="readDataItemButton">Ler itens de dados no Lock Manager (botão de exemplo, será removido)</button>
+        <div id="dataItemTableContainer" class="table-wrapper"></div>
+      </div>
+      <hr>
+      <div class="main-interaction-row">
+        <label for="dataItemText">Itens de dados</label>
+        <textarea id="dataItemText" rows="4" class="wide-textarea">
+            ["Pipoca", "Pepsi", "Bombom"]
+            </textarea>
+      </div>
+      <div class="main-interaction-row">
+        <span id="dataItemValidationMessage" style="color: red;"></span>
+      </div>
+      <div class="main-interaction-row">
+        <button id="setDataItemsButton">Inicializar items de dados</button>
+      </div>
+      <hr>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- JavaScript personalizado está nesses arquivos. tables.js tem código relevante. -->
+  <script src="{{url_for('static', filename='js/debug.js')}}"></script>
+  <script src="{{url_for('static', filename='js/tables.js')}}"></script>
+  <script src="{{url_for('static', filename='js/buttons.js')}}"></script>
+  <script src="{{url_for('static', filename='js/communication.js')}}"></script>
+
+  <script src="{{url_for('static', filename='js/vendor/modernizr-3.11.2.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/plugins.js')}}"></script>
+  <script src="{{url_for('static', filename='js/main.js')}}"></script>
+
+</body>
+
+</html>
