@@ -2,9 +2,21 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Competition Controller</title>
+    <title>Concurrency control</title>
+    <link href="{{url_for('static', filename='css/semantic_ui/semantic.min.css')}}" rel="stylesheet">
 </head>
 <body>
+
+<div class="ui container center aligned">
+    <h2 class="ui icon header">
+        <i class="settings icon"></i>
+        <div class="content">
+            Concurrency control
+        </div>
+    </h2>
+</div>
+
+<div class="ui divider"></div>
 
 <div class="ui form">
     <div class="ui container center aligned">
@@ -55,8 +67,11 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Ações</div>
                             <div class="menu">
-                                <div class="item" data-value="write_lock">Write Lock</div>
                                 <div class="item" data-value="read_lock">Read Lock</div>
+                                <div class="item" data-value="read_item">Read Item</div>
+                                <div class="item" data-value="write_lock">Write Lock</div>
+                                <div class="item" data-value="read_lock">Write Item</div>
+                                <div class="item" data-value="unlock">Unlock</div>
                             </div>
                         </div>
                         <label>Ações</label>
@@ -75,7 +90,7 @@
                 <div class="column">
                     <div class="field">
                         <label>Log</label>
-                        <textarea id="log"></textarea>
+                        <textarea id="log" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -86,7 +101,6 @@
 
 </body>
 
-<link href="{{url_for('static', filename='css/semantic_ui/semantic.min.css')}}" rel="stylesheet">
 <script
         src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
