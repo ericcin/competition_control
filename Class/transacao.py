@@ -2,11 +2,16 @@ class transacao:
 
     def __init__(self, data_items_names_list):
         self.data_items = {chave: 0 for chave in data_items_names_list}
-        self.transactions = []
-    def read_item(self, lock_register, transaction, item, data_item_lock_manager_items):
+        self.transactions_names = []
+        self.data_items_of_transactions_list = []
 
-        self.data_items[item] = data_item_lock_manager_items[item]
-        return self.data_items[item]
+    def get_new_transaction(self, transaction_name):
+        self.transactions_names.append(transaction_name)
+        self.data_items_of_transactions_list.append(self.data_items)
+
+    def read_item(self, lock_register, transaction, item, data_item_lock_manager_items):
+        self.data_items_of_transactions_list[int(transaction[-1])-1][item] = data_item_lock_manager_items[item]
+        #return self.data_items[item]
 
     def write_item(self, lock_register, transaction, item):
         pass

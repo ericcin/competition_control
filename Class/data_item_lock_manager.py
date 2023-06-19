@@ -91,10 +91,10 @@ class dataItemLockManager:
                                                             ' pela ' + str(self.lock_register[self.array_position][3]))
 
     #executadas após a da main
-    def read_item(self, item, data_item_lock_manager_items):
-
-        self.data_items[item] = data_item_lock_manager_items[item]
-        return self.data_items[item]
+    # def read_item(self, item, data_item_lock_manager_items):
+    #
+    #     self.data_items[item] = data_item_lock_manager_items[item]
+    #     return self.data_items[item]
 
     def write_item(self, lock_register, transaction, item):
         pass
