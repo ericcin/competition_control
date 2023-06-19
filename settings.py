@@ -1,0 +1,80 @@
+"""
+Module Name: settings
+Author: Equipe 3
+Purpose: Funções de log e debug.
+Created: 2023-06-13
+"""
+
+import logging
+import datetime
+from typing import Any, Dict
+from decouple import config
+
+# Set up the logger
+def init_logger(fname: str = "common") -> logging.Logger:
+   print(f"Creating logger for: {fname}")
+   if (fname == ""):
+       fname = "common"
+   logger = logging.getLogger(fname)
+   logger.setLevel(logging.DEBUG)
+   log_file = f"logs/{fname}.log"
+   file_handler = logging.FileHandler(log_file)
+   file_handler.setLevel(logging.DEBUG)
+   formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+   file_handler.setFormatter(formatter)
+   logger.addHandler(file_handler)
+   if (fname!="common"):
+      logger.debug(f"Module {fname} is running.")
+   else:
+      logger.debug("Running.")
+   return logger
+
+# Log the module load message
+common_logger = init_logger()
+logger = init_logger(__name__)
+
+def time_print(message) -> None:
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"{timestamp}: {message}")
+
+def info_message(message: str) -> None:
+    common_logger.info(message)
+    time_print(message)
+
+def warning_message(message: str) -> None:
+    common_logger.warning(message)
+    time_print(message)
+
+def error_message(message: str) -> None:
+    common_logger.error(message)
+    time_print(message)
+
+def critical_message(message: str) -> None:
+    common_logger.critical(message)
+    time_print(message)
+
+def debug_message(message: str) -> None:
+    common_logger.info(message)
+    time_print(message)
+
+def load_settings() -> Dict[str, str]:
+    info_message("Buscando configurações...")
+    settings = {
+       'CONCURRENCY_TABLES_DIRECTORY': config('CONCURRENCY_TABLES_DIRECTORY')
+    }
+    debug_message(settings)
+    return settings
+
+def inspect_type(variable: Any) -> str:
+    if isinstance(variable, dict):
+        # Check the types of the dictionary's values
+        value_types = [type(value).__name__ for value in variable.values()]
+        result = f"dict[{', '.join(value_types)}]"
+    else:
+        result = type(variable).__name__
+    return result
+
+def check_type(variable: Any) -> str:
+    result = inspect_type(variable)
+    debug_message(result)
+    return result
