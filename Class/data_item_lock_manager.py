@@ -113,3 +113,4 @@ class dataItemLockManager:
             print('Escrita de item não realizada, pois a ' + transaction + ' não possui bloqueio exclusivo sobre o '
                                                                            'item ' + item + '!')
 
+
