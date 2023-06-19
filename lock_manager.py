@@ -11,7 +11,7 @@ logger = init_logger(__name__)
 
 
 class LockManager:
-    def __init__(self, data_items):
+    def __init__(self, data_items = ["Users", "Products", "Orders"]):
         debug_message(
             f"""LockManager: __init__:
                 inspect_type(data_items) = {inspect_type(data_items)},

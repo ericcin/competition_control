@@ -4,32 +4,54 @@ Author: Equipe 3
 Purpose: Recebe mensagens em JSON e despacham para o método adequado do LockManager.
 Created: 2023-06-14
 """
-from typing import Any, Dict
+import json
+from typing import Any, Dict, List
 
 from lock_manager import LockManager
-from settings import debug_message, info_message, init_logger
+from settings import debug_message, info_message, init_logger, inspect_type
 
 logger = init_logger(__name__)
 
-def init(message: Dict[str, Any]) -> Dict[str, Any]:
+lock_manager = LockManager()
+
+
+def get_lock_manager():
+    return lock_manager
+
+
+def reset(message: Dict[str, Any]) -> Dict[str, Any]:
+    global lock_manager
+    debug_message(
+        f"""lock_manager_dispatching: __init__:
+                inspect_type(message) = {inspect_type(message)},
+                message = {message}"""
+    )
     try:
         data_items = message["data_items"]
-        global lock_manager
+        debug_message(f"data_items: {data_items}")
         lock_manager = LockManager(data_items)
         result = lock_manager.list_data_items()
     except Exception as e:
-        result = {"error": f"init: {str(e)}"}
+        result = {"error": f"reset: {str(e)}"}
         debug_message(result)
-    debug_message(f"init: result: {result}")
+    debug_message(f"reset: result: {result}")
     return result
 
+
+def init_lock_manager(message: List[str]) -> Dict[str, Any]:
+    reset({"data_items": message})
+    return lock_manager
+
+
 def list_data_items(message: Dict[str, Any]) -> Dict[str, Any]:
+    debug_message(f"list_data_items: message: {message}")
     try:
         result = lock_manager.list_data_items()
     except Exception as e:
         result = {"error": f"list_data_items: {str(e)}"}
     debug_message(f"list_data_items: result: {result}")
     return result
+
 
 def formatted_list_data_items(message: Dict[str, Any]) -> Dict[str, Any]:
     try:
@@ -95,10 +117,11 @@ def acquire_exclusive_lock(message):
     # ...
     return message
 
-def dispatcher(method, message):
+
+def lock_manager_dispatcher(method, message):
     info_message(f"lock_manager_dispatcher: method = {method}")
     switch = {
-        "init": init,
+        "reset": reset,
         "get_lock_status": get_lock_status,
         "list_locks": list_locks,
         "has_shared_lock": has_shared_lock,

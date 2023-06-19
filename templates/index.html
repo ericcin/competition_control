@@ -25,10 +25,11 @@
 
 <body>
   <div id="main-app" class="table-wrapper">
-    <div class="main-interaction-container">
+    <div class="main-interaction-container" id="dataItemControlsContainer">
+      <h1>Controle dos itens de dados</h1>
       <div class="main-interaction-row">
-        <button id="readDataItemButton">Ler itens de dados no Lock Manager (botão de exemplo, será removido)</button>
         <div id="dataItemTableContainer" class="table-wrapper"></div>
+        <button id="readDataItemButton">Atualizar tabela.</button>
       </div>
       <hr>
       <div class="main-interaction-row">
@@ -48,15 +49,14 @@
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- JavaScript personalizado está nesses arquivos. tables.js tem código relevante. -->
-  <script src="{{url_for('static', filename='js/debug.js')}}"></script>
-  <script src="{{url_for('static', filename='js/tables.js')}}"></script>
-  <script src="{{url_for('static', filename='js/buttons.js')}}"></script>
-  <script src="{{url_for('static', filename='js/communication.js')}}"></script>
 
   <script src="{{url_for('static', filename='js/vendor/modernizr-3.11.2.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/plugins.js')}}"></script>
-  <script src="{{url_for('static', filename='js/main.js')}}"></script>
+
+  <!-- JavaScript personalizado está nesses arquivos. tables.js tem código relevante. -->
+  <script src="{{url_for('static', filename='js/debug.js')}}"></script>
+  <script src="{{url_for('static', filename='js/tables.js')}}"></script>
+  <script src="{{url_for('static', filename='js/communication.js')}}"></script>
 
 </body>
 

@@ -30,18 +30,3 @@ function pythonListToJSON(header, list) {
     return obj;
   });
 }
-
-var myHeader = 'Data Item';
-var myList = ['Apple', 'Banana', 'Orange'];
-
-var jsonArray = pythonListToJSON(myHeader, myList);
-console.log(jsonArray);
-
-function listCSVs() {
-  $.get('http://127.0.0.1:5000/list_csv_files', function (data) {
-    // Print the received JSON data
-    console.log(data);
-    var jsonTable = jsonToHtmlTable(data);
-    $('#csvTableContainer').empty().append(jsonTable);
-  });
-}

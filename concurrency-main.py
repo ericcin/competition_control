@@ -1,67 +1,98 @@
-from Class.data_item_lock_manager import dataItemLockManager
-from Class.transacao import transacao
+"""
+Module Name: concurrency-main
+Author: Equipe 3
+Purpose: Inicializar um servidor Flask que recebe comandos para simular
+            transações concorrentes em um BD.
+Created: 2023-06-13
+"""
+import os
+import secrets
+from pathlib import Path
 
-data_item_lock_manager = dataItemLockManager
+import flask
 
-def create_new_transaction():
-    name = data_item_lock_manager.create_transaction_name()
-    name = transacao
+# Barra de debug
+from flask_debugtoolbar import DebugToolbarExtension
 
-def set_transaction_readed_item(item):
-    pass
+from lock_manager_dispatching import init_lock_manager, lock_manager_dispatcher
+from settings import debug_message, info_message, init_logger
 
-def set_transaction_writed_item(item):
-    pass
+logger = init_logger(__name__)
+
+app = flask.Flask(__name__)
+
+# Inicializando a barra de debug
+SECRET_FILE_PATH = Path(".flask_secret")
+try:
+    with SECRET_FILE_PATH.open("r") as secret_file:
+        app.secret_key = secret_file.read()
+except FileNotFoundError:
+    # Let's create a cryptographically secure code in that file
+    with SECRET_FILE_PATH.open("w") as secret_file:
+        app.secret_key = secrets.token_hex(32)
+        secret_file.write(app.secret_key)
+
+app.debug = True
+toolbar = DebugToolbarExtension(app)
 
 
+@app.before_request
+def preprocess_request() -> None:
+    logger.debug(f"preprocess_request: request.method: {flask.request.method}")
+    logger.debug(f"preprocess_request: request.headers: {flask.request.headers}")
+    logger.debug(f"preprocess_request: request.path: {flask.request.path}")
+    logger.debug(f"preprocess_request: request.cookies: {flask.request.cookies}")
+    logger.debug(f"preprocess_request: request.get_data(): {flask.request.get_data()}")
 
 
-#abaixo testes, acima código mesmo
-# chaves = ["a", "b", "c"]
-# meu_dicionario = {chave: 0 for chave in chaves}
-#
-# meu_dicionario['a'] = 1
-# print(meu_dicionario)
-# #
-# print(meu_dicionario['a'])
-#
-# item_teste = 'c'
-#
-# if item_teste not in meu_dicionario:
-#     print(item_teste+' nao esta no dicionario')
+@app.route("/")
+def index():
+    return flask.render_template("index.html")
 
-#testes2
-# lista = [['x', 'read_lock', 1, ['transacao1']]]
-#
-# lista[0][3].append('transacao2')
-#
-# print(str(lista[0])+'essas')
-#
-# lista.append(['z', 'write_lock', 1, ['transacao3']])
-#
-# if 'transacao2' in lista[0][3]:
-#     print('OK')
-#
-# for i in lista:
-#     print(i)
-#     if 'x' in i and 'read_lock' in i:
-#         print('X ESTA NA LISTA')
-# #
-# # if'x' in lista:
-# #     print('X EM LISTA')
-# print("LISTA ANTES DO DEL")
-# print(lista)
-# del lista[0]
-# print("DEL FEITO")
-# print(lista)
 
-#testes 3
-# lista = []
-#
-# print(lista)
-#
-# if lista == []:
-#     print('s')
-#
-# for i in lista:
-#     print(i)
+#  flask.send_file(
+#                       path_or_file,
+#                       mimetype=None,
+#                       as_attachment=False,
+#                       download_name=None,
+#                       conditional=True,
+#                       etag=True,
+#                       last_modified=None,
+#                       max_age=None)
+@app.route("/favicon.ico")
+def favicon():
+    debug_message("favicon: " + os.getcwd())
+    return flask.send_file(
+        "favicon.ico",
+        mimetype="image/x-icon",
+        download_name="favicon.ico",
+    )
+
+
+# Rota para o gerenciador de bloqueios
+@app.route("/LockManager", methods=["GET", "POST"])
+def lock_manager():
+    info_message("lock_manager called.")
+
+    try:
+        data = flask.request.get_json()
+        info_message(f"lock_manager: data: {data}")
+        method = data.get("method")
+        message = data.get("message")
+        result = lock_manager_dispatcher(method, message)
+    except Exception as e:
+        error_message = f"lock_manager: {str(e)}"
+        result = {"error": error_message}
+    info_message(f"lock_manager: result: {result}")
+    result_jsonified = flask.jsonify(result)
+    info_message(f"lock_manager: result_jsonified: {result_jsonified}")
+    return result_jsonified
+
+
+def main() -> None:
+    info_message(f"main: Flask version: {flask.__version__}")
+    app.run()
+
+
+if __name__ == "__main__":
+    main()

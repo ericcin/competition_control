@@ -1,3 +1,34 @@
+function lockManager(requestData, successCallbackFunction) {
+  $.ajax({
+    url: "http://127.0.0.1:5000/LockManager",
+    type: "POST",
+    dataType: 'json',
+    data: JSON.stringify(requestData),
+    contentType: "application/json; charset=utf-8",
+    success: function (data) {
+      scrutinize(data, "data", '#readDataItemButton success');
+      successCallbackFunction(data);
+    }
+  });
+}
+
+function updateDataItemTable(data) {
+  var jsonTable = jsonToHtmlTable(pythonListToJSON("Item de Dados", data));
+  $('#dataItemTableContainer').empty().append(jsonTable);
+}
+
+function listDataItems() {
+  var requestData = {
+    method: 'list_data_items',
+    message: '{}',
+  }
+
+  scrutinize(requestData.message, "message", '#readDataItemButton');
+  scrutinize(requestData, "requestData", '#readDataItemButton');
+
+  lockManager(requestData, updateDataItemTable)
+}
+
 function validateDataItemList(dataItemList, place) {
   let result = false;
   try {
@@ -13,6 +44,9 @@ function validateDataItemList(dataItemList, place) {
 }
 
 $(document).ready(function () {
+
+  listDataItems();
+
   // Validar lista de data items na text area
   $('#dataItemText').change(function () {
     const trimmedValue = $('#dataItemText').val().trim();
@@ -56,7 +90,7 @@ $(document).ready(function () {
   // Setar data items
   $('#setDataItemsButton').click(function () {
     var requestData = {
-      method: 'init',
+      method: 'reset',
       message: { data_items: eval($('#dataItemText').val()) },
     }
     timePrint(requestData.message, '#setDataItemsButton', 'message')
