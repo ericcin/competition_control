@@ -35,7 +35,7 @@
       <div class="main-interaction-row">
         <label for="dataItemText">Itens de dados</label>
         <textarea id="dataItemText" rows="4" class="wide-textarea">
-            ["Pipoca", "Pepsi", "Bombom"]
+            ["Students", "Classes", "Enrollment"]
             </textarea>
       </div>
       <div class="main-interaction-row">
@@ -52,12 +52,18 @@
           <button id="readTransactionsButton">Atualizar tabela.</button>
         </div>
         <hr>
-      <div class="main-interaction-row">
-        <label for="transactionText">Itens de dados</label>
-        <textarea id="transactionText" rows="4" class="wide-textarea">
-            ["Pipoca", "Pepsi", "Bombom"]
-            </textarea>
-      </div>
+        <div class="main-interaction-row">
+          <label for="transactionText">Transação</label>
+          <textarea id="transactionText" rows="4" class="wide-textarea">
+            WRITE(Users);
+          </textarea>
+        </div>
+        <div class="main-interaction-row">
+          <span id="transactionValidationMessage" style="color: red;"></span>
+        </div>
+        <div class="main-interaction-row">
+          <button id="initTransactionButton">Iniciar transação</button>
+        </div>
       </div>
     </div>
   </div>

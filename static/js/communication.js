@@ -1,6 +1,6 @@
-function lockManager(requestData, successCallbackFunction) {
+function goPost(route, requestData, successCallbackFunction) {
   $.ajax({
-    url: "http://127.0.0.1:5000/LockManager",
+    url: "http://127.0.0.1:5000" + route,
     type: "POST",
     dataType: 'json',
     data: JSON.stringify(requestData),
@@ -12,10 +12,24 @@ function lockManager(requestData, successCallbackFunction) {
   });
 }
 
+function lockManager(requestData, successCallbackFunction) {
+  goPost("/LockManager", requestData, successCallbackFunction)
+}
+
+function transactionManager(requestData, successCallbackFunction) {
+  goPost("/TransactionManager", requestData, successCallbackFunction)
+}
+
 function updateDataItemTable(data) {
   var jsonTable = jsonToHtmlTable(pythonListToJSON("Item de Dados", data));
   $('#dataItemTableContainer').empty().append(jsonTable);
 }
+
+function updateTransactionTable(data) {
+  var jsonTable = jsonToHtmlTable(pythonListToJSON("Transação", data));
+  $('#transactionTableContainer').empty().append(jsonTable);
+}
+
 
 function listDataItems() {
   var requestData = {
@@ -23,10 +37,22 @@ function listDataItems() {
     message: '{}',
   }
 
-  scrutinize(requestData.message, "message", '#readDataItemButton');
-  scrutinize(requestData, "requestData", '#readDataItemButton');
+  scrutinize(requestData.message, "message", 'listDataItems');
+  scrutinize(requestData, "requestData", 'listDataItems');
 
-  lockManager(requestData, updateDataItemTable)
+  lockManager(requestData, updateDataItemTable);
+}
+
+function listTransactions() {
+  var requestData = {
+    method: 'list_transactions',
+    message: '{}',
+  }
+
+  scrutinize(requestData.message, "message", 'listTransactions');
+  scrutinize(requestData, "requestData", 'listTransactions');
+
+  transactionManager(requestData, updateTransactionTable);
 }
 
 function validateDataItemList(dataItemList, place) {
@@ -46,6 +72,7 @@ function validateDataItemList(dataItemList, place) {
 $(document).ready(function () {
 
   listDataItems();
+  listTransactions();
 
   // Validar lista de data items na text area
   $('#dataItemText').change(function () {

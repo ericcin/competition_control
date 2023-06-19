@@ -1,10 +1,9 @@
 """
-Module Name: concurrency_dispatching
+Module Name: lock_manager_dispatching
 Author: Equipe 3
 Purpose: Recebe mensagens em JSON e despacham para o método adequado do LockManager.
 Created: 2023-06-14
 """
-import json
 from typing import Any, Dict, List
 
 from lock_manager import LockManager

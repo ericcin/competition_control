@@ -15,6 +15,7 @@ import flask
 from flask_debugtoolbar import DebugToolbarExtension
 
 from lock_manager_dispatching import init_lock_manager, lock_manager_dispatcher
+from transaction_manager_dispatching import init_transaction_manager, transaction_manager_dispatcher
 from settings import debug_message, info_message, init_logger
 
 logger = init_logger(__name__)
@@ -72,7 +73,7 @@ def favicon():
 # Rota para o gerenciador de bloqueios
 @app.route("/LockManager", methods=["GET", "POST"])
 def lock_manager():
-    info_message("lock_manager called.")
+    info_message("/LockManager reached.")
 
     try:
         data = flask.request.get_json()
@@ -86,6 +87,25 @@ def lock_manager():
     info_message(f"lock_manager: result: {result}")
     result_jsonified = flask.jsonify(result)
     info_message(f"lock_manager: result_jsonified: {result_jsonified}")
+    return result_jsonified
+
+# Rota para o gerenciador de transações
+@app.route("/TransactionManager", methods=["GET", "POST"])
+def transaction_manager():
+    info_message("/TransactionManager reached.")
+
+    try:
+        data = flask.request.get_json()
+        info_message(f"transaction_manager: data: {data}")
+        method = data.get("method")
+        message = data.get("message")
+        result = transaction_manager_dispatcher(method, message)
+    except Exception as e:
+        error_message = f"transaction_manager: {str(e)}"
+        result = {"error": error_message}
+    info_message(f"transaction_manager: result: {result}")
+    result_jsonified = flask.jsonify(result)
+    info_message(f"transaction_manager: result_jsonified: {result_jsonified}")
     return result_jsonified
 
 
