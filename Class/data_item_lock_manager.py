@@ -13,8 +13,8 @@ class dataItemLockManager:
     # lock compartilhado
     def read_lock(self, data_item, transaction):
         if self.has_exclusive_lock(data_item) == True:
-            #TODO essa parte talvez seja interessante eu mostrar quem está com bloqueio exclusivo no item
-            print("Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo!")
+            print("Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo:")
+            print(self.lock_register[self.array_position])
         else:
             if self.has_shared_lock(data_item) == False:
                 self.create_lock_register(data_item, 'read_lock', 1, transaction)
@@ -25,7 +25,6 @@ class dataItemLockManager:
     #lock exclusivo
     def write_lock(self, data_item, transaction):
         if self.has_shared_lock(data_item) == True:
-            #TODO essa parte talvez seja interessante eu mostrar quem está com bloqueio compartilhado no item
             print("Impossível realizar lock exclusivo em " +data_item+ " pois ele possui bloqueio compartilhado pelas "
                                                 "transações: " + str(self.lock_register[self.array_position][3]))
         else:
@@ -37,7 +36,7 @@ class dataItemLockManager:
 
     #desbloqueio
     def unlock(self, data_item, transaction):
-        if self.transaction_has_lock(transaction) == True:
+        if self.transaction_has_lock_in_specific_item(transaction, data_item) == True:
             del self.lock_register[self.array_position]
             print('Dado ' +data_item + ' desbloqueado com sucesso pela ' + transaction + '!')
         else:
@@ -51,9 +50,17 @@ class dataItemLockManager:
         self.lock_register[self.array_position][2] = self.lock_register[self.array_position][2] + 1
         self.lock_register[self.array_position][3].append(transaction)
 
-    def transaction_has_lock(self, transaction):
+    def transaction_has_lock_in_specific_item(self, transaction, item):
         for pos, i in enumerate(self.lock_register):
-            if transaction in i:
+            if transaction in i and item in i:
+                self.array_position = pos
+                return True
+            else:
+                return False
+
+    def transaction_has_write_lock_in_specific_item(self, transaction, item):
+        for pos, i in enumerate(self.lock_register):
+            if transaction in i and item in i and 'write_lock' in i:
                 self.array_position = pos
                 return True
             else:
@@ -90,11 +97,19 @@ class dataItemLockManager:
             return ('Impossível realizar Lock exclusivo em ' + data_item + ' pois ele já possui lock exclusivo realizado'
                                                             ' pela ' + str(self.lock_register[self.array_position][3]))
 
-    #executadas após a da main
-    # def read_item(self, item, data_item_lock_manager_items):
-    #
-    #     self.data_items[item] = data_item_lock_manager_items[item]
-    #     return self.data_items[item]
+    def read_item(self, transaction, item, value):
+        if self.transaction_has_lock_in_specific_item(transaction, item) == True:
+            self.data_items[int(transaction[-1]) - 1][item] = value
+            print('Leitura de item realizada no item ' + item + ' para a ' + transaction + '!')
+        else:
+            print('Leitura de item não realizada, pois a ' + transaction + ' não possui bloqueio sobre o item ' +
+                  item + '!')
 
-    def write_item(self, lock_register, transaction, item):
-        pass
+    def write_item(self, transaction, item, value):
+        if self.transaction_has_write_lock_in_specific_item(transaction, item) == True:
+            self.data_items[int(transaction[-1]) - 1][item] = value
+            print('Escrita de item feita no item ' + item + 'para a ' + transaction + '!')
+        else:
+            print('Escrita de item não realizada, pois a ' + transaction + ' não possui bloqueio exclusivo sobre o '
+                                                                           'item ' + item + '!')
+
