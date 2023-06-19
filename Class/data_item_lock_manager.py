@@ -13,35 +13,36 @@ class dataItemLockManager:
     # lock compartilhado
     def read_lock(self, data_item, transaction):
         if self.has_exclusive_lock(data_item) == True:
-            print("Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo:")
-            print(self.lock_register[self.array_position])
+            return ("Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo:" +
+                    self.lock_register[self.array_position])
         else:
             if self.has_shared_lock(data_item) == False:
                 self.create_lock_register(data_item, 'read_lock', 1, transaction)
-                print('Lock compartilhado em ' + data_item + ' realizado! Total de itens compartilhando item de dado: 1')
+                return 'Lock compartilhado em ' + data_item + ' realizado! Total de itens compartilhando item de dado: 1'
             else:
-                print(self.check_transaction_in_read_lock(data_item, transaction))
+                return self.check_transaction_in_read_lock(data_item, transaction)
 
-    #lock exclusivo
+    # lock exclusivo
     def write_lock(self, data_item, transaction):
         if self.has_shared_lock(data_item) == True:
-            print("Impossível realizar lock exclusivo em " +data_item+ " pois ele possui bloqueio compartilhado pelas "
-                                                "transações: " + str(self.lock_register[self.array_position][3]))
+            return ("Impossível realizar lock exclusivo em " + data_item +
+                    " pois ele possui bloqueio compartilhado pelas transações: "
+                    + str(self.lock_register[self.array_position][3]))
         else:
             if self.has_exclusive_lock(data_item) == False:
                 self.create_lock_register(data_item, 'write_lock', 1, transaction)
-                print('Lock exclusivo em ' + data_item + ' realizado pela ' + transaction + '!')
+                return 'Lock exclusivo em ' + data_item + ' realizado pela ' + transaction + '!'
             else:
-                print(self.check_transaction_in_write_lock(data_item, transaction))
+                return self.check_transaction_in_write_lock(data_item, transaction)
 
-    #desbloqueio
+    # desbloqueio
     def unlock(self, data_item, transaction):
         if self.transaction_has_lock_in_specific_item(transaction, data_item) == True:
             del self.lock_register[self.array_position]
-            print('Dado ' +data_item + ' desbloqueado com sucesso pela ' + transaction + '!')
+            return 'Dado ' + data_item + ' desbloqueado com sucesso pela ' + transaction + '!'
         else:
-            print('A ' + transaction + ' não pode realizar desbloqueio no dado ' + data_item + ' pois ela não possui'
-                                                                                            'bloqueio sobre o dado!' )
+            return ('A ' + transaction + ' não pode realizar desbloqueio no dado '
+                    + data_item + ' pois ela não possui bloqueio sobre o dado!')
 
     def create_lock_register(self, data_item, lock, number_of_locks, transaction):
         self.lock_register.append([data_item, lock, number_of_locks, [transaction]])
@@ -85,32 +86,31 @@ class dataItemLockManager:
     def check_transaction_in_read_lock(self, data_item, transaction):
         if transaction not in self.lock_register[self.array_position][3]:
             self.alter_lock_register(transaction)
-            return('Lock compartilhado em ' + data_item + ' realizado! Itens compartilhando item de dado: '
-                  + str(self.lock_register[self.array_position][3]))
+            return ('Lock compartilhado em ' + data_item + ' realizado! Itens compartilhando item de dado: '
+                    + str(self.lock_register[self.array_position][3]))
         else:
-            return('Lock compartilhado em ' + data_item + ' já está sendo realizado pela ' + transaction)
+            return 'Lock compartilhado em ' + data_item + ' já está sendo realizado pela ' + transaction
 
     def check_transaction_in_write_lock(self, data_item, transaction):
         if transaction in self.lock_register[self.array_position][3]:
-            return('Lock exclusivo em ' + data_item + ' já está sendo realizado pela ' + transaction)
+            return 'Lock exclusivo em ' + data_item + ' já está sendo realizado pela ' + transaction
         else:
-            return ('Impossível realizar Lock exclusivo em ' + data_item + ' pois ele já possui lock exclusivo realizado'
-                                                            ' pela ' + str(self.lock_register[self.array_position][3]))
+            return ('Impossível realizar Lock exclusivo em ' + data_item
+                    + ' pois ele já possui lock exclusivo realizado pela '
+                    + str(self.lock_register[self.array_position][3]))
 
     def read_item(self, transaction, item, value):
         if self.transaction_has_lock_in_specific_item(transaction, item) == True:
             self.data_items[int(transaction[-1]) - 1][item] = value
-            print('Leitura de item realizada no item ' + item + ' para a ' + transaction + '!')
+            return 'Leitura de item realizada no item ' + item + ' para a ' + transaction + '!'
         else:
-            print('Leitura de item não realizada, pois a ' + transaction + ' não possui bloqueio sobre o item ' +
-                  item + '!')
+            return ('Leitura de item não realizada, pois a ' + transaction + ' não possui bloqueio sobre o item ' +
+                    item + '!')
 
     def write_item(self, transaction, item, value):
         if self.transaction_has_write_lock_in_specific_item(transaction, item) == True:
             self.data_items[int(transaction[-1]) - 1][item] = value
-            print('Escrita de item feita no item ' + item + 'para a ' + transaction + '!')
+            return 'Escrita de item feita no item ' + item + 'para a ' + transaction + '!'
         else:
-            print('Escrita de item não realizada, pois a ' + transaction + ' não possui bloqueio exclusivo sobre o '
-                                                                           'item ' + item + '!')
-
-
+            return ('Escrita de item não realizada, pois a ' + transaction + ' não possui bloqueio exclusivo sobre o '
+                                                                             'item ' + item + '!')

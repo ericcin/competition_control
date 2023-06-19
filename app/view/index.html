@@ -33,22 +33,7 @@
                 <div class="column">
                     <div class="field">
                         <div class="ui selection dropdown">
-                            <input type="hidden" name="dado" id="dado">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Item de Dado</div>
-                            <div class="menu">
-                                <div class="item" data-value="x">X</div>
-                                <div class="item" data-value="y">Y</div>
-                                <div class="item" data-value="z">Z</div>
-                            </div>
-                        </div>
-                        <label for="dado">Item de Dado</label>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="transacao">
+                            <input type="hidden" name="transaction" id="transaction">
                             <i class="dropdown icon"></i>
                             <div class="default text">Transação</div>
                             <div class="menu">
@@ -60,17 +45,18 @@
                         <label>Transação</label>
                     </div>
                 </div>
+
                 <div class="column">
                     <div class="field">
                         <div class="ui selection dropdown">
-                            <input type="hidden" name="acoes">
+                            <input type="hidden" name="action" id="action">
                             <i class="dropdown icon"></i>
                             <div class="default text">Ações</div>
                             <div class="menu">
                                 <div class="item" data-value="read_lock">Read Lock</div>
                                 <div class="item" data-value="read_item">Read Item</div>
                                 <div class="item" data-value="write_lock">Write Lock</div>
-                                <div class="item" data-value="read_lock">Write Item</div>
+                                <div class="item" data-value="write_item">Write Item</div>
                                 <div class="item" data-value="unlock">Unlock</div>
                             </div>
                         </div>
@@ -80,7 +66,24 @@
 
                 <div class="column">
                     <div class="field">
-                        <button class="ui blue button"><i class="play icon"></i>Realizar Ação</button>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="item" id="item">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Item de Dado</div>
+                            <div class="menu">
+                                <div class="item" data-value="x">X</div>
+                                <div class="item" data-value="y">Y</div>
+                                <div class="item" data-value="z">Z</div>
+                            </div>
+                        </div>
+                        <label for="dado">Item de Dado</label>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="field">
+                        <button class="ui blue button" id="btnRealizarAcao"><i class="play icon"></i>Realizar Ação
+                        </button>
                     </div>
                 </div>
 
@@ -90,7 +93,7 @@
                 <div class="column">
                     <div class="field">
                         <label>Log</label>
-                        <textarea id="log" readonly></textarea>
+                        <textarea name="log" id="log" readonly></textarea>
                     </div>
                 </div>
             </div>
