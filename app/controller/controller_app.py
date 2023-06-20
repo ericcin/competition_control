@@ -25,7 +25,7 @@ def realizar_acao():
     if action == "read_lock":
         result = data.read_lock(item, transaction)
     elif action == "read_item":
-        result = data.read_item(transaction, item, "0")
+        result = data.can_read_item(transaction, item)
     elif action == "write_lock":
         result = data.write_lock(item, transaction)
     elif action == "write_item":
