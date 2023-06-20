@@ -53,36 +53,47 @@ class dataItemLockManager:
         self.lock_register[self.array_position][3].append(transaction)
 
     def transaction_has_lock_in_specific_item(self, transaction, item):
-        for pos, i in enumerate(self.lock_register):
-            if transaction in i and item in i:
-                self.array_position = pos
-                return True
-            else:
-                return False
+        if self.lock_register != []:
+            for pos, i in enumerate(self.lock_register):
+                if transaction in i and item in i:
+                    self.array_position = pos
+                    return True
+                else:
+                    return False
+        return False
 
     def transaction_has_write_lock_in_specific_item(self, transaction, item):
-        for pos, i in enumerate(self.lock_register):
-            if transaction in i and item in i and 'write_lock' in i:
-                self.array_position = pos
-                return True
-            else:
-                return False
+        if self.lock_register != []:
+            for pos, i in enumerate(self.lock_register):
+                if transaction in i and item in i and 'write_lock' in i:
+                    self.array_position = pos
+                    return True
+                else:
+                    return False
+        else:
+            return False
 
     def has_shared_lock(self, data_item):
-        for pos, i in enumerate(self.lock_register):
-            if data_item in i and 'read_lock' in i:
-                self.array_position = pos
-                return True
-            else:
-                return False
+        if self.lock_register != []:
+            for pos, i in enumerate(self.lock_register):
+                if data_item in i and 'read_lock' in i:
+                    self.array_position = pos
+                    return True
+                else:
+                    return False
+        else:
+            return False
 
     def has_exclusive_lock(self, data_item):
-        for pos, i in enumerate(self.lock_register):
-            if data_item in i and 'write_lock' in i:
-                self.array_position = pos
-                return True
-            else:
-                return False
+        if self.lock_register != []:
+            for pos, i in enumerate(self.lock_register):
+                if data_item in i and 'write_lock' in i:
+                    self.array_position = pos
+                    return True
+                else:
+                    return False
+        else:
+            return False
 
     def check_transaction_in_read_lock(self, data_item, transaction):
         if transaction not in self.lock_register[self.array_position][3]:
