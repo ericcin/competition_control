@@ -5,20 +5,18 @@ $('.message .close').on('click', function() {
 });
 
 $('#new_transaction').click(function () {
-
-        $.ajax({
-            method: 'POST',
-            url: '/new_transaction/',
-//            data: { 'transaction': transaction, 'action': action, 'item': item, 'value1': value1, 'operator': operator, 'value2': value2},
-            success: function (resposta) {
-                let resultado = JSON.parse(resposta)
-                console.log(resultado['result'])
-                $('#menu_transaction').append('<div class="item" data-value="' + resultado['result'] + '">' + resultado['result'].toUpperCase() + '</div>')
-            },
-        });
-
-
-
+    $.ajax({
+        method: 'POST',
+        url: '/new_transaction/',
+        success: function (resposta) {
+            let resultado = JSON.parse(resposta)
+            console.log(resultado['result'])
+            let result = resultado['result'];
+            $('#name_new_transation').html(result.toUpperCase());
+            $('#sucesso').show();
+            $('#menu_transaction').append('<div class="item" data-value="' + result + '">' + result.toUpperCase() + '</div>')
+        },
+    });
 });
 
 function validate_fields(){
@@ -42,12 +40,11 @@ function validate_fields(){
 
 $('#btnRealizarAcao').click(function () {
     let action = $('#action').val()
-    if(action == "write_item"){
+    if(action == "write_item") {
         $('#selected_item').val($('#item').val());
         $('#value1').val('');
         $('#operator').val('');
         $('#value2').val('');
-//        $('#header').text(action.toUpperCase());
         $('#value_item').modal('show');
     }
     else
@@ -61,7 +58,7 @@ $('#btnCheck').click(function () {
 function active_action () {
 
     if(validate_fields()){
-        $('#erro').hide();
+        $('.message').hide();
         let transaction = $('#transaction').val();
         let action = $('#action').val();
         let item = $('#item').val();
