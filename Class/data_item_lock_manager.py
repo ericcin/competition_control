@@ -5,7 +5,6 @@ class dataItemLockManager:
         self.count = 0
         self.lock_register = []
         self.array_position = None
-        self.write_item_ok = False
 
     def create_transaction_name(self):
         self.count = self.count + 1
@@ -112,7 +111,7 @@ class dataItemLockManager:
                     + str(self.lock_register[self.array_position][3]))
 
     def can_read_item(self, transaction, item):
-        if self.transaction_has_lock_in_specific_item(transaction, item) == True:
+        if self.transaction_has_lock_in_specific_item(transaction, item):
             return True
             # return 'Leitura de item realizada no item ' + item + ' para a ' + transaction + '!'
         else:
@@ -121,11 +120,12 @@ class dataItemLockManager:
             #         item + '!')
 
     def write_item(self, transaction, item, value):
-        if self.transaction_has_write_lock_in_specific_item(transaction, item) == True:
+        if self.transaction_has_write_lock_in_specific_item(transaction, item):
             self.data_items[item] = value
-            self.write_item_ok = True
-            return 'Escrita de item feita no item ' + item + 'para a ' + transaction + '!'
+            return True
+            # return 'Escrita de item feita no item ' + item + 'para a ' + transaction + '!'
         else:
-            return ('Escrita de item não realizada, pois a ' + transaction + ' não possui bloqueio exclusivo sobre o '
-                                                                             'item ' + item + '!')
+            return False
+            # return ('Escrita de item não realizada, pois a ' + transaction + ' não possui bloqueio exclusivo sobre o '
+            #                                                                  'item ' + item + '!')
 
