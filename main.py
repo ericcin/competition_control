@@ -13,15 +13,15 @@ def create_new_transaction():
 
 
 def write_lock(data_item, transaction):
-    data_item_lock_manager.write_lock(data_item, transaction)
+    return data_item_lock_manager.write_lock(data_item, transaction)
 
 
 def read_lock(data_item, transaction):
-    data_item_lock_manager.read_lock(data_item, transaction)
+    return data_item_lock_manager.read_lock(data_item, transaction)
 
 
 def unlock(data_item, transaction):
-    data_item_lock_manager.unlock(data_item, transaction)
+    return data_item_lock_manager.unlock(data_item, transaction)
 
 
 def read_item(transaction_name, item):
@@ -40,7 +40,7 @@ def write_item(transaction_name, item_to_be_changed, item_one, item_two, value):
                                      "atualizado de " + item_one + " para a " + transaction_name + "!")
     query_two = check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_changed, item_two)
     if query_two == False:
-        print(item_to_be_changed + " não pode ser atualizado, para realizar essa ação, faça leitura do valor "
+        return (item_to_be_changed + " não pode ser atualizado, para realizar essa ação, faça leitura do valor "
                                    "atualizado de " + item_two + " para a " + transaction_name + "!")
     if query_one == True and query_two == True:
         data_item_lock_manager.write_item(transaction_name, item_to_be_changed, value)
