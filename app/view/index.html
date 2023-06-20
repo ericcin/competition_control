@@ -33,7 +33,7 @@
                 <div class="column">
                     <div class="field">
                         <div class="ui selection dropdown">
-                            <input type="hidden" name="transaction" id="transaction">
+                            <input type="hidden" name="transaction" id="transaction" required>
                             <i class="dropdown icon"></i>
                             <div class="default text">Transação</div>
                             <div class="menu">
@@ -49,7 +49,7 @@
                 <div class="column">
                     <div class="field">
                         <div class="ui selection dropdown">
-                            <input type="hidden" name="action" id="action">
+                            <input type="hidden" name="action" id="action" required>
                             <i class="dropdown icon"></i>
                             <div class="default text">Ações</div>
                             <div class="menu">
@@ -67,7 +67,7 @@
                 <div class="column">
                     <div class="field">
                         <div class="ui selection dropdown">
-                            <input type="hidden" name="item" id="item">
+                            <input type="hidden" name="item" id="item" required>
                             <i class="dropdown icon"></i>
                             <div class="default text">Item de Dado</div>
                             <div class="menu">
@@ -76,7 +76,7 @@
                                 <div class="item" data-value="z">Z</div>
                             </div>
                         </div>
-                        <label for="dado">Item de Dado</label>
+                        <label for="item">Item de Dado</label>
                     </div>
                 </div>
 
@@ -98,7 +98,68 @@
                 </div>
             </div>
 
+            <div class="column row">
+                <div class="column">
+                    <div class="ui warning message" id="erro">
+                        <i class="close icon"></i>
+                        <div class="header">
+                            Campos Vazios!
+                        </div>
+                        Informe todos os campos solicitados
+                    </div>
+                </div>
+            </div>
+
         </div>
+    </div>
+</div>
+
+<div class="ui modal" id="value_item">
+    <div class="header" id="header">Write Item</div>
+    <div class="content">
+
+        <div class="ui form center aligned">
+            <div class="four fields">
+                <div class="field">
+                    <div class="ui input">
+                        <input type="text" id="selected_item" placeholder="Item Selecionado" readonly>
+                    </div>
+                    <label for="selected_item">Item Selecionado</label>
+                </div>
+                <div class="field">
+                    <div class="ui input">
+                        <input type="number" id="value1" placeholder="Valor 1">
+                    </div>
+                    <label for="value1">Valor 1</label>
+                </div>
+
+                <div class="field">
+                    <div class="ui selection dropdown">
+                        <input type="hidden" name="operator" id="operator">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Operador Aritmético</div>
+                        <div class="menu">
+                            <div class="item" data-value="+">+</div>
+                            <div class="item" data-value="-">-</div>
+                            <div class="item" data-value="*">x</div>
+                            <div class="item" data-value="/">÷</div>
+                        </div>
+                    </div>
+                    <label for="operator">Operador Aritmético</label>
+                </div>
+                <div class="field">
+                    <div class="ui input">
+                        <input type="number" id="value2" placeholder="Valor 2">
+                    </div>
+                    <label for="value2">Valor 2</label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="actions">
+        <div class="ui green approve icon button" id="btnCheck"><i class="ui check icon"></i></div>
+        <div class="ui red cancel icon button"><i class="ui x icon icon"></i></div>
     </div>
 </div>
 

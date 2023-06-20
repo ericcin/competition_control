@@ -18,8 +18,9 @@ def realizar_acao():
     transaction = request.form['transaction']
     action = request.form['action']
     item = request.form['item']
-
-    result = ''
+    value1 = request.form['value1']
+    operator = request.form['operator']
+    value2 = request.form['value2']
 
     if action == "read_lock":
         result = data.read_lock(item, transaction)
@@ -28,7 +29,7 @@ def realizar_acao():
     elif action == "write_lock":
         result = data.write_lock(item, transaction)
     elif action == "write_item":
-        result = data.write_item(transaction, item, "")
+        result = data.write_item(transaction, item, "0")
     elif action == "unlock":
         result = data.unlock(item, transaction)
     else:
