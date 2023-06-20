@@ -1,11 +1,8 @@
 from flask import Blueprint, render_template, request, json
 from Class import data_item_lock_manager
-from Class.data_item_lock_manager import dataItemLockManager
+import main
 
 index = Blueprint("index", "competition controller", template_folder="view", static_folder="static")
-
-data = dataItemLockManager(["x", "y", "z"])
-
 
 @index.route("/")
 def homepage():
@@ -23,15 +20,15 @@ def realizar_acao():
     value2 = request.form['value2']
 
     if action == "read_lock":
-        result = data.read_lock(item, transaction)
+        result = main.read_lock(item, transaction)
     elif action == "read_item":
-        result = data.can_read_item(transaction, item)
+        result = main.read_item(transaction, item)
     elif action == "write_lock":
-        result = data.write_lock(item, transaction)
+        result = main.write_lock(item, transaction)
     elif action == "write_item":
-        result = data.write_item(transaction, item, "0")
+        result = main.write_item(transaction, item, value1, value2, "0")
     elif action == "unlock":
-        result = data.unlock(item, transaction)
+        result = main.unlock(item, transaction)
     else:
         return json.dumps({'status': '400'})
 

@@ -9,7 +9,7 @@ class dataItemLockManager:
 
     def create_transaction_name(self):
         self.count = self.count + 1
-        return 'transacao' + str(self.count)
+        return 't' + str(self.count)
 
     # lock compartilhado
     def read_lock(self, data_item, transaction):
