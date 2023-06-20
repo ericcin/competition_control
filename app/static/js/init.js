@@ -4,6 +4,23 @@ $('.message .close').on('click', function() {
     $('.message').hide();
 });
 
+$('#new_transaction').click(function () {
+
+        $.ajax({
+            method: 'POST',
+            url: '/new_transaction/',
+//            data: { 'transaction': transaction, 'action': action, 'item': item, 'value1': value1, 'operator': operator, 'value2': value2},
+            success: function (resposta) {
+                let resultado = JSON.parse(resposta)
+                console.log(resultado['result'])
+                $('#menu_transaction').append('<div class="item" data-value="' + resultado['result'] + '">' + resultado['result'].toUpperCase() + '</div>')
+            },
+        });
+
+
+
+});
+
 function validate_fields(){
     let action = $('#action').val()
     if($('#transaction').val() == '')

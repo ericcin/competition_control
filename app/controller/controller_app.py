@@ -4,10 +4,17 @@ import main
 
 index = Blueprint("index", "competition controller", template_folder="view", static_folder="static")
 
+
 @index.route("/")
 def homepage():
     template = render_template("index.html")
     return template
+
+
+@index.route("/new_transaction/", methods=['POST'])
+def new_transaction():
+    transaction_name = main.create_new_transaction()
+    return json.dumps({'status': 'OK', 'result': transaction_name})
 
 
 @index.route("/action/", methods=['POST'])
