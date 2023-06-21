@@ -1,8 +1,7 @@
-lock_register = ['a']
-#
-# for pos, i in enumerate(lock_register):
-#     print(pos)
-#     print(i)
+lista = [['isso', [1,2]]]
 
-if lock_register == []:
-    print('A')
+print(len(lista[0][1]))
+
+lista[0][1].remove(2)
+
+print(lista)
