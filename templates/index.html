@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Banco de Dados (IN9040) 2023.1, Projeto 2, Equipe 3: lgms, e, a @cin.ufpe.br - Controle de Concorrência</title>
+  <title>Banco de Dados (IN9040) 2023.1, Projeto 2, Equipe 3: lgms, eafs3, ajfs @cin.ufpe.br - Controle de Concorrência</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -62,7 +62,14 @@
           <span id="transactionValidationMessage" style="color: red;"></span>
         </div>
         <div class="main-interaction-row">
-          <button id="initTransactionButton">Iniciar transação</button>
+          <button id="initTransactionButton">Inserir transação</button>
+        </div>
+        <hr>
+        <div class="main-interaction-row">
+          <button id="stepIntoTransactionButton">Step Into</button>
+        </div>
+        <div class="main-interaction-row">
+          <div id="lockTableContainer" class="table-wrapper"></div>
         </div>
       </div>
     </div>
@@ -77,6 +84,7 @@
   <script src="{{url_for('static', filename='js/debug.js')}}"></script>
   <script src="{{url_for('static', filename='js/tables.js')}}"></script>
   <script src="{{url_for('static', filename='js/communication.js')}}"></script>
+  <script src="{{url_for('static', filename='js/onready.js')}}"></script>
 
 </body>
 

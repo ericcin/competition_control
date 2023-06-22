@@ -8,14 +8,14 @@ function jsonToHtmlTable(jsonData) {
   var headers = Object.keys(jsonData[0]);
   var headerRow = $('<tr>').appendTo(thead);
   headers.forEach(function (header) {
-    $('<th>').text(header).appendTo(headerRow);
+    $('<th>').html(header).appendTo(headerRow);
   });
 
   // Create table rows and cells
   jsonData.forEach(function (rowData) {
     var row = $('<tr>').appendTo(tbody);
     headers.forEach(function (header) {
-      $('<td>').text(rowData[header]).appendTo(row);
+      $('<td>').html(rowData[header] === ' ' ? '&nbsp;' : rowData[header]).appendTo(row);
     });
   });
 

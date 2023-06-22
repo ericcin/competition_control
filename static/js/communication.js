@@ -21,15 +21,25 @@ function transactionManager(requestData, successCallbackFunction) {
 }
 
 function updateDataItemTable(data) {
+  scrutinize(data, place = 'updateDataItemTable')
   var jsonTable = jsonToHtmlTable(pythonListToJSON("Item de Dados", data));
+  scrutinize(jsonTable, variableName = 'jsonTable', place = 'updateDataItemTable')
   $('#dataItemTableContainer').empty().append(jsonTable);
 }
 
 function updateTransactionTable(data) {
+  scrutinize(data, palce = 'updateTransactionTable')
   var jsonTable = jsonToHtmlTable(pythonListToJSON("Transação", data));
+  scrutinize(jsonTable, variableName = 'jsonTable', place = 'updateTransactionTable')
   $('#transactionTableContainer').empty().append(jsonTable);
 }
 
+function updateLocksTable(data) {
+  scrutinize(data, variableName = 'data', place = 'updateLocksTable')
+  var jsonTable = jsonToHtmlTable(data);
+  scrutinize(jsonTable, variableName = 'jsonTable', place = 'updateLocksTable')
+  $('#lockTableContainer').empty().append(jsonTable);
+}
 
 function listDataItems() {
   var requestData = {
@@ -55,89 +65,38 @@ function listTransactions() {
   transactionManager(requestData, updateTransactionTable);
 }
 
-function validateDataItemList(dataItemList, place) {
-  let result = false;
-  try {
-    const parsedData = JSON.parse(dataItemList);
-    if (Array.isArray(parsedData) && parsedData.every(item => typeof item === 'string')) {
-      result = [true, parsedData, checkType(parsedData, 'dataItemList', place)];
-    }
-  } catch (error) {
-    timePrint(error, place, 'dataItemList');
-    timePrint('Invalid format.', place, 'dataItemList');
+function listLocks() {
+  var requestData = {
+    method: 'list_locks',
+    message: '{}',
   }
-  return result;
+
+  scrutinize(requestData.message, "message", 'listLocks');
+  scrutinize(requestData, "requestData", 'listLocks');
+
+  transactionManager(requestData, updateLocksTable);
 }
 
-$(document).ready(function () {
+function setDataItems() {
+  var requestData = {
+    method: 'reset',
+    message: { data_items: eval($('#dataItemText').val()) },
+  }
 
-  listDataItems();
-  listTransactions();
+  scrutinize(requestData.message, "message", 'setDataItems');
+  scrutinize(requestData, "requestData", 'setDataItems');
 
-  // Validar lista de data items na text area
-  $('#dataItemText').change(function () {
-    const trimmedValue = $('#dataItemText').val().trim();
-    $('#dataItemText').val(trimmedValue);
-    const isValid = validateDataItemList($('#dataItemText').val(), 'dataItemText change')[0];
-    timePrint(isValid)
-    $('#setDataItemsButton').prop('disabled', !isValid);
-    dataItemValidationMessage.textContent = "";
-    if (!isValid) {
-      dataItemValidationMessage.textContent = 'Lista de itens de dados em um formato inválido. Use um array JavaScript ou lista Python.';
-    }
-  });
+  lockManager(requestData, updateDataItemTable);
+}
 
-  // Ler data items - provavelmente será eliminada
-  $('#readDataItemButton').click(function () {
-    var requestData = {
-      method: 'list_data_items',
-      message: '{}',
-    }
-    timePrint(requestData.message, '#readDataItemButton', 'message')
-    checkType(requestData.message, "message", '#readDataItemButton');
-    timePrint(requestData, '#readDataItemButton', 'requestData')
-    checkType(requestData, "requestData", '#readDataItemButton');
+function stepInto() {
+  var requestData = {
+    method: 'step_into',
+    message: '{}',
+  }
 
-    $.ajax({
-      url: "http://127.0.0.1:5000/LockManager",
-      type: "POST",
-      dataType: 'json',
-      data: JSON.stringify(requestData),
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      success: function (data) {
-        timePrint(data, '#readDataItemButton success', 'data');
-        checkType(data, "data", '#readDataItemButton success');
-        var jsonTable = jsonToHtmlTable(pythonListToJSON("Item de Dados", data));
-        $('#dataItemTableContainer').empty().append(jsonTable);
-      }
-    });
-  });
+  scrutinize(requestData.message, "message", 'stepInto');
+  scrutinize(requestData, "requestData", 'stepInto');
 
-  // Setar data items
-  $('#setDataItemsButton').click(function () {
-    var requestData = {
-      method: 'reset',
-      message: { data_items: eval($('#dataItemText').val()) },
-    }
-    timePrint(requestData.message, '#setDataItemsButton', 'message')
-    checkType(requestData.message, "message", '#setDataItemsButton');
-    timePrint(requestData, '#setDataItemsButton', 'requestData')
-    checkType(requestData, "requestData", '#setDataItemsButton');
-
-    $.ajax({
-      url: "http://127.0.0.1:5000/LockManager",
-      type: "POST",
-      dataType: 'json',
-      data: JSON.stringify(requestData),
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      success: function (data) {
-        timePrint(data, '#setDataItemsButton success', 'data');
-        checkType(data, "data", '#setDataItemsButton success');
-        var jsonTable = jsonToHtmlTable(pythonListToJSON("Item de Dados", data));
-        $('#dataItemTableContainer').empty().append(jsonTable);
-      }
-    });
-  });
-});
+  transactionManager(requestData, updateLocksTable);
+}

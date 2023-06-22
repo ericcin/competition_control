@@ -52,12 +52,31 @@ def list_transactions(message: Dict[str, Any]) -> Dict[str, Any]:
     debug_message(f"list_transactions: result: {result}")
     return result
 
+def list_locks(message: Dict[str, Any]) -> Dict[str, Any]:
+    debug_message(f"list_locks: message: {message}")
+    try:
+        result = transaction_manager.list_locks()
+    except Exception as e:
+        result = {"error": f"list_locks: {str(e)}"}
+    debug_message(f"list_locks: result: {result}")
+    return result
+
+def step_into(message: Dict[str, Any]) -> Dict[str, Any]:
+    debug_message(f"step_into: message: {message}")
+    try:
+        result = transaction_manager.step_into()
+    except Exception as e:
+        result = {"error": f"step_into: {str(e)}"}
+    debug_message(f"step_into: result: {result}")
+    return result
 
 def transaction_manager_dispatcher(method, message):
     info_message(f"transaction_manager_dispatcher: method = {method}")
     switch = {
         "reset": reset,
         "list_transactions": list_transactions,
+        "list_locks": list_locks,
+        "step_into": step_into,
     }
     if method in switch:
         debug_message(f"transaction_manager_dispatcher: message: {message}")

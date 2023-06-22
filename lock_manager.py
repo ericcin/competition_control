@@ -26,25 +26,56 @@ class LockManager:
         self.shared_locks: List[Tuple[str, str]] = []
 
     def acquire_exclusive_lock(self, data_item: str, transaction: str) -> Dict[str, str]:
+        debug_message(
+            f"""LockManager: acquire_exclusive_lock:
+            inspect_type(data_item) = {inspect_type(data_item)},
+            inspect_type(transaction) = {inspect_type(transaction)},
+            (data_item in self.exclusive_locks.keys()) = {(data_item in self.exclusive_locks.keys())},
+            (data_item in [shared_lock[0] for shared_lock in self.shared_locks]) = {(data_item in [shared_lock[0] for shared_lock in self.shared_locks])},
+            """
+        )
+        result = {"result": "NOT VALID", "data_string": f"('E', {data_item})"}
         if data_item not in self.data_items:
-            return {"result": "FAIL", "data_string": f"NO_ITEM_FOUND({data_item}"}
+            result = {"result": "FAIL", "data_string": f"NO_ITEM_FOUND({data_item}"}
 
-        if data_item in self.exclusive_locks or data_item in self.shared_locks:
-            return {"result": "WAIT", "data_string": f"('E', {data_item})"}
+        if (data_item in self.exclusive_locks.keys()) or (data_item in [shared_lock[0] for shared_lock in self.shared_locks]):
+            result = {"result": "WAIT", "data_string": f"('E', {data_item})"}
         else:
             self.exclusive_locks[data_item] = transaction
-            return {"result": "SUCCESS", "data_string": f"('E', {data_item})"}
+            result = {"result": "SUCCESS", "data_string": f"('E', {data_item})"}
+        debug_message(
+            f"""LockManager: acquire_exclusive_lock (exit):
+            result: {result}
+            self.list_locks(data_item): {self.list_locks(data_item)}
+            """
+        )
+        return result
 
     def acquire_shared_lock(self, data_item: str, transaction: str) -> Dict[str, str]:
+        debug_message(
+            f"""LockManager: acquire_shared_lock:
+            inspect_type(data_item) = {inspect_type(data_item)},
+            inspect_type(transaction) = {inspect_type(transaction)},
+            self.exclusive_locks.keys = {self.exclusive_locks.keys()},
+            """
+        )
+        result = {"result": "NOT VALID", "data_string": f"('S', {data_item})"}
         if data_item not in self.data_items:
-            return {"result": "FAIL", "data_string": f"NO_ITEM_FOUND({data_item}"}
+            result =  {"result": "FAIL", "data_string": f"NO_ITEM_FOUND({data_item}"}
 
-        if data_item in self.exclusive_locks:
-            return {"result": "WAIT", "data_string": f"('S', {data_item})"}
+        if (data_item in self.exclusive_locks.keys()):
+            result =  {"result": "WAIT", "data_string": f"('S', {data_item})"}
         else:
             lock = (data_item, transaction)
-            self.shared_locks.add(lock)
-            return {"result": "SUCCESS", "data_string": f"('S', {data_item})"}
+            self.shared_locks.append(lock)
+            result =  {"result": "SUCCESS", "data_string": f"('S', {data_item})"}
+        debug_message(
+            f"""LockManager: acquire_shared_lock (exit):
+            data_item: {data_item}
+            self.list_locks(data_item): {self.list_locks(data_item)}
+            """
+        )
+        return result
 
     def release_lock(self, data_item: str, transaction: str) -> str:
         if data_item not in self.data_items:
@@ -77,18 +108,35 @@ class LockManager:
         return locks
 
     def get_lock_status(self, data_item, transaction):
+        debug_message(
+            f"""LockManager: get_lock_status:
+            inspect_type(data_item) = {inspect_type(data_item)},
+            inspect_type(transaction) = {inspect_type(transaction)},
+            inspect_type(self.exclusive_locks) = {inspect_type(self.exclusive_locks)},
+            inspect_type(self.shared_locks) = {inspect_type(self.shared_locks)},
+            """
+        )
         if data_item not in self.data_items:
             return f"LockManager: get_lock_status: Invalid data item: {data_item}."
 
-        if data_item in self.exclusive_locks:
+        lock_string = " "
+        if data_item in self.exclusive_locks.keys():
             if self.exclusive_locks[data_item] == transaction:
-                return "E"
-            else:
-                return " "
-        elif any(item == data_item for item, _ in self.shared_locks):
-            return "S"
-        else:
-            return " "
+                lock_string = "E"
+        elif data_item in [lock[0] for lock in self.shared_locks]:
+            transactions = [lock[1] for lock in self.shared_locks if lock[0] == data_item]
+            if any(lock_transaction == transaction for lock_transaction in transactions):
+                lock_string = "S"
+        debug_message(
+            f"""LockManager: get_lock_status (exit):
+            inspect_type(data_item) = {inspect_type(data_item)},
+            inspect_type(transaction) = {inspect_type(transaction)},
+            inspect_type(self.exclusive_locks) = {inspect_type(self.exclusive_locks)},
+            inspect_type(self.shared_locks) = {inspect_type(self.shared_locks)},
+            inspect_type(lock_string) = {inspect_type(lock_string)},
+            """
+        )
+        return lock_string
 
     def list_data_items(self):
         return self.data_items
