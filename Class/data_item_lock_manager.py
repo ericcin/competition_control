@@ -1,20 +1,23 @@
+from datetime import datetime
+
 class dataItemLockManager:
 
     def __init__(self, data_items_names_list):
         self.data_items = {chave: 0 for chave in data_items_names_list}
         self.count = 0
         self.lock_register = []
+        self.complete_lock_register = []
         self.array_position = None
 
     def create_transaction_name(self):
         self.count = self.count + 1
-        return 'transacao' + str(self.count)
+        return 't' + str(self.count)
 
     # lock compartilhado
     def read_lock(self, data_item, transaction):
         if self.has_exclusive_lock(data_item) == True:
             return ("Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo:" +
-                    self.lock_register[self.array_position])
+                    str(self.lock_register[self.array_position]))
         else:
             if self.has_shared_lock(data_item) == False:
                 self.create_lock_register(data_item, 'read_lock', 1, transaction)
@@ -38,50 +41,78 @@ class dataItemLockManager:
     # desbloqueio
     def unlock(self, data_item, transaction):
         if self.transaction_has_lock_in_specific_item(transaction, data_item) == True:
-            del self.lock_register[self.array_position]
-            return 'Dado ' + data_item + ' desbloqueado com sucesso pela ' + transaction + '!'
+            if len(self.lock_register[self.array_position][3]) == 1:
+                del self.lock_register[self.array_position]
+                self.insert_unlock_in_complete_lock_register(data_item, transaction)
+                return 'Dado ' + data_item + ' desbloqueado com sucesso pela ' + transaction + '!'
+            if len(self.lock_register[self.array_position][3]) > 1:
+                self.lock_register[self.array_position][3].remove(transaction)
+                self.insert_unlock_in_complete_lock_register(data_item, transaction)
+                return 'Dado ' + data_item + ' desbloqueado com sucesso pela ' + transaction + '!'
         else:
             return ('A ' + transaction + ' não pode realizar desbloqueio no dado '
                     + data_item + ' pois ela não possui bloqueio sobre o dado!')
 
     def create_lock_register(self, data_item, lock, number_of_locks, transaction):
         self.lock_register.append([data_item, lock, number_of_locks, [transaction]])
+        self.insert_in_complete_lock_register(data_item, lock, number_of_locks, transaction)
+
+    def insert_in_complete_lock_register(self, data_item, lock, number_of_locks, transaction):
+        self.complete_lock_register.append([data_item, lock, number_of_locks, [transaction], self.get_now_date_time()])
+
+    def insert_unlock_in_complete_lock_register(self, data_item, transaction):
+        self.complete_lock_register.append([data_item, 'unlock', transaction, self.get_now_date_time()])
 
     def alter_lock_register(self, transaction):
         self.lock_register[self.array_position][2] = self.lock_register[self.array_position][2] + 1
         self.lock_register[self.array_position][3].append(transaction)
+        self.complete_lock_register[self.array_position][2] = self.complete_lock_register[self.array_position][2] + 1
+        self.complete_lock_register[self.array_position][3].append(transaction)
+        self.complete_lock_register[self.array_position][4] = self.get_now_date_time()
 
     def transaction_has_lock_in_specific_item(self, transaction, item):
-        for pos, i in enumerate(self.lock_register):
-            if transaction in i and item in i:
-                self.array_position = pos
-                return True
-            else:
-                return False
+        if self.lock_register != []:
+            for pos, i in enumerate(self.lock_register):
+                print(i)
+                if transaction in i[3] and item in i:
+                    self.array_position = pos
+                    return True
+                else:
+                    return False
+        return False
 
     def transaction_has_write_lock_in_specific_item(self, transaction, item):
-        for pos, i in enumerate(self.lock_register):
-            if transaction in i and item in i and 'write_lock' in i:
-                self.array_position = pos
-                return True
-            else:
-                return False
+        if self.lock_register != []:
+            for pos, i in enumerate(self.lock_register):
+                if transaction in i[3] and item in i and 'write_lock' in i:
+                    self.array_position = pos
+                    return True
+                else:
+                    return False
+        else:
+            return False
 
     def has_shared_lock(self, data_item):
-        for pos, i in enumerate(self.lock_register):
-            if data_item in i and 'read_lock' in i:
-                self.array_position = pos
-                return True
-            else:
-                return False
+        if self.lock_register != []:
+            for pos, i in enumerate(self.lock_register):
+                if data_item in i and 'read_lock' in i:
+                    self.array_position = pos
+                    return True
+                else:
+                    return False
+        else:
+            return False
 
     def has_exclusive_lock(self, data_item):
-        for pos, i in enumerate(self.lock_register):
-            if data_item in i and 'write_lock' in i:
-                self.array_position = pos
-                return True
-            else:
-                return False
+        if self.lock_register != []:
+            for pos, i in enumerate(self.lock_register):
+                if data_item in i and 'write_lock' in i:
+                    self.array_position = pos
+                    return True
+                else:
+                    return False
+        else:
+            return False
 
     def check_transaction_in_read_lock(self, data_item, transaction):
         if transaction not in self.lock_register[self.array_position][3]:
@@ -99,18 +130,26 @@ class dataItemLockManager:
                     + ' pois ele já possui lock exclusivo realizado pela '
                     + str(self.lock_register[self.array_position][3]))
 
-    def read_item(self, transaction, item, value):
-        if self.transaction_has_lock_in_specific_item(transaction, item) == True:
-            self.data_items[int(transaction[-1]) - 1][item] = value
-            return 'Leitura de item realizada no item ' + item + ' para a ' + transaction + '!'
+    def can_read_item(self, transaction, item):
+        if self.transaction_has_lock_in_specific_item(transaction, item):
+            return True
+            # return 'Leitura de item realizada no item ' + item + ' para a ' + transaction + '!'
         else:
-            return ('Leitura de item não realizada, pois a ' + transaction + ' não possui bloqueio sobre o item ' +
-                    item + '!')
+            return False
+            # return ('Leitura de item não realizada, pois a ' + transaction + ' não possui bloqueio sobre o item ' +
+            #         item + '!')
 
     def write_item(self, transaction, item, value):
-        if self.transaction_has_write_lock_in_specific_item(transaction, item) == True:
-            self.data_items[int(transaction[-1]) - 1][item] = value
-            return 'Escrita de item feita no item ' + item + 'para a ' + transaction + '!'
+        if self.transaction_has_write_lock_in_specific_item(transaction, item):
+            self.data_items[item] = value
+            return True
+            # return 'Escrita de item feita no item ' + item + 'para a ' + transaction + '!'
         else:
-            return ('Escrita de item não realizada, pois a ' + transaction + ' não possui bloqueio exclusivo sobre o '
-                                                                             'item ' + item + '!')
+            return False
+            # return ('Escrita de item não realizada, pois a ' + transaction + ' não possui bloqueio exclusivo sobre o '
+            #                                                                  'item ' + item + '!')
+
+    def get_now_date_time(self):
+        now = datetime.now()
+        date_time = now.strftime('%d/%m/%Y %H:%M')
+        return date_time
