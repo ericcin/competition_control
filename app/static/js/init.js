@@ -15,6 +15,8 @@ $('#new_transaction').click(function () {
             $('#name_new_transation').html(result.toUpperCase());
             $('#sucesso').show();
             $('#menu_transaction').append('<div class="item" data-value="' + result + '">' + result.toUpperCase() + '</div>')
+            $('#coluna').append('<th>'+ result.toUpperCase() + '</th>')
+            $('#linha').append('<td><textarea id="log' + result +'" readonly></textarea></td>')
         },
     });
 });
@@ -65,11 +67,13 @@ function active_action () {
         let value1 = 0;
         let operator = 0;
         let value2 = 0;
+        let calculo = '';
 
         if(action == "write_item"){
             value1 = $('#value1').val();
             operator = $('#operator').val();
             value2 = $('#value2').val();
+            calculo = item.toUpperCase() + ' = ' + value1 + ' ' + operator + ' ' + value2 + ' ;\n';
         }
 
         $.ajax({
@@ -80,6 +84,8 @@ function active_action () {
                 let resultado = JSON.parse(resposta)
                 console.log(resultado['result'])
                 $("#log").val($("#log").val() + "\n" + resultado['result'])
+
+                $('#log' + transaction).append(action + '(' + item.toUpperCase() +');\n' + calculo)
             },
         });
     } else
