@@ -1,5 +1,13 @@
 $('.ui.dropdown').dropdown();
 
+$('.ui.sticky').sticky({
+    context: '#example1'
+});
+
+$('#progresso').progress({
+    total: 3
+});
+
 $('.message .close').on('click', function() {
     $('.message').hide();
 });
@@ -69,10 +77,24 @@ function validate_fields(){
     return true;
 }
 
-$('#btnRealizarAcao').click(function () {
+$('#btnAdicionarAcao').click(function () {
+
+    if(validate_fields()){
+        $('.message').hide();
+        let transaction = $('#transaction').val().toUpperCase();
+        let action = $('#action').val().toUpperCase();
+        let item = $('#item').val().toUpperCase();
+
+        $('#fila').append('<tr><td>' + transaction + '</td><td>' + action + '(' + item + ')</td></tr>')
+
+    }
+
+});
+
+$('#btnIniciar').click(function () {
     let action = $('#action').val()
-    if(action == "write_item") {
-        $('#selected_item').val($('#item').val());
+    if(action == 'write_item') {
+        $('#selected_item').val($('#item').val().toUpperCase());
         $('#value1').val('');
         $('#operator').val('');
         $('#value2').val('');
@@ -98,7 +120,7 @@ function active_action () {
         let value2 = 0;
         let calculo = '';
 
-        if(action == "write_item"){
+        if(action == 'write_item'){
             value1 = $('#value1').val();
             operator = $('#operator').val();
             value2 = $('#value2').val();

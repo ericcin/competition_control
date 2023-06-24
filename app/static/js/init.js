@@ -72,7 +72,7 @@ function validate_fields(){
 $('#btnRealizarAcao').click(function () {
     let action = $('#action').val()
     if(action == "write_item") {
-        $('#selected_item').val($('#item').val());
+        $('#selected_item').val($('#item').val().toUpperCase());
         $('#value1').val('');
         $('#operator').val('');
         $('#value2').val('');

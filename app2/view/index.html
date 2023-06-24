@@ -18,138 +18,174 @@
 
 <div class="ui divider"></div>
 
-<div class="ui form">
-    <div class="ui container center aligned">
-        <div class="ui relaxed grid">
+<div class="ui compact segment" id="example1" style="margin: 1rem 5rem;">
 
-            <div class="five column row">
-
-                <div class="column">
-                    <div class="field">
-                        <button class="ui green button" id="new_transaction"><i class="add icon"></i>Nova Transação
-                        </button>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="field">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="transaction" id="transaction" required>
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Transação</div>
-                            <div class="menu" id="menu_transaction">
-                                <!--                                <div class="item" data-value="t1">T1</div>-->
-                                <!--                                <div class="item" data-value="t2">T2</div>-->
-                                <!--                                <div class="item" data-value="t2">T3</div>-->
-                            </div>
-                        </div>
-                        <label>Transação</label>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="field">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="action" id="action" required>
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Ações</div>
-                            <div class="menu">
-                                <div class="item" data-value="read_lock">Read Lock</div>
-                                <div class="item" data-value="read_item">Read Item</div>
-                                <div class="item" data-value="write_lock">Write Lock</div>
-                                <div class="item" data-value="write_item">Write Item</div>
-                                <div class="item" data-value="unlock">Unlock</div>
-                            </div>
-                        </div>
-                        <label>Ações</label>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="field">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="item" id="item" required>
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Item de Dado</div>
-                            <div class="menu" id="menu_item">
-                                <!--                                <div class="item" data-value="x">X</div>-->
-                                <!--                                <div class="item" data-value="y">Y</div>-->
-                                <!--                                <div class="item" data-value="z">Z</div>-->
-                            </div>
-                        </div>
-                        <label for="item">Item de Dado</label>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="field">
-                        <button class="ui blue button" id="btnRealizarAcao"><i class="play icon"></i>Realizar Ação
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="column row">
-                <div class="column">
-                    <table class="ui celled table">
+    <div class="right ui rail" style="margin:0;padding:0 0 0 1rem">
+        <div class="ui sticky">
+            <div class="ui divided items">
+                <div class="item">
+                    <table class="ui celled structured collapsing table">
                         <thead>
-                        <tr id="coluna"></tr>
+                        <tr>
+                            <th colspan="2">Fila de Ações</th>
+                        </tr>
+                        <tr>
+                            <th>Transação</th>
+                            <th>Ação</th>
+                        </tr>
                         </thead>
-                        <tbody>
-                        <tr id="linha"></tr>
+                        <tbody id="fila">
                         </tbody>
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="column row right aligned">
-                <div class="column">
-                    <div class="field">
-                        <button class="ui yellow button" id="btnResolverImpasse">
-                            <i class="exclamation triangle icon"></i>Resolver Impasse
-                        </button>
-                    </div>
-
-                    <div class="field">
-                        <button class="ui yellow button" id="btnRegistro">
-                            <i class="history icon"></i>Exibir Registro de Look
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="column row">
-                <div class="column">
-                    <div class="field">
-                        <label>Log</label>
-                        <textarea name="log" id="log" readonly></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="column row">
-                <div class="column">
-                    <div class="ui warning message" id="erro">
-                        <i class="close icon"></i>
-                        <div class="header">
-                            Campos Vazios!
+    <div class="ui form">
+        <div class="ui container">
+            <div class="ui grid">
+                <div class="five column row">
+                    <div class="column">
+                        <div class="field">
+                            <button class="ui green button" id="new_transaction">
+                                <i class="add icon"></i>Nova Transação
+                            </button>
                         </div>
-                        Informe todos os campos solicitados
+                    </div>
+                    <div class="column">
+                        <div class="field">
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="transaction" id="transaction" required>
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Transação</div>
+                                <div class="menu" id="menu_transaction">
+                                    <!--                                <div class="item" data-value="t1">T1</div>-->
+                                    <!--                                <div class="item" data-value="t2">T2</div>-->
+                                    <!--                                <div class="item" data-value="t2">T3</div>-->
+                                </div>
+                            </div>
+                            <label>Transação</label>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="field">
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="action" id="action" required>
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Ações</div>
+                                <div class="menu">
+                                    <div class="item" data-value="read_lock">Read Lock</div>
+                                    <div class="item" data-value="read_item">Read Item</div>
+                                    <div class="item" data-value="write_lock">Write Lock</div>
+                                    <div class="item" data-value="write_item">Write Item</div>
+                                    <div class="item" data-value="unlock">Unlock</div>
+                                </div>
+                            </div>
+                            <label>Ações</label>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="field">
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="item" id="item" required>
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Item de Dado</div>
+                                <div class="menu" id="menu_item">
+                                    <!--                                <div class="item" data-value="x">X</div>-->
+                                    <!--                                <div class="item" data-value="y">Y</div>-->
+                                    <!--                                <div class="item" data-value="z">Z</div>-->
+                                </div>
+                            </div>
+                            <label for="item">Item de Dado</label>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="field">
+                            <button class="ui blue button" id="btnAdicionarAcao"><i class="play icon"></i>Adicionar
+                                Ação
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column row center aligned">
+                    <div class="column">
+                        <div class="field">
+                            <button class="ui green button" id="btnIniciar"><i class="play icon"></i>Iniciar
+                                Transações
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="column row">
-                <div class="column">
-                    <div class="ui success message" id="sucesso">
-                        <i class="close icon"></i>
-                        <div class="header">
-                            Nova Transação
-                        </div>
-                        Transação <strong id="name_new_transation"></strong> criada!
+            <div class="ui grid">
+                <div class="column row">
+                    <div class="column">
+                        <table class="ui very basic collapsing table">
+                            <thead>
+                            <tr id="coluna"></tr>
+                            </thead>
+                            <tbody>
+                            <tr id="linha"></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+
+                <div class="column row right aligned">
+                    <div class="column">
+                        <div class="field">
+                            <button class="ui yellow button" id="btnResolverImpasse">
+                                <i class="exclamation triangle icon"></i>Resolver Impasse
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+<!--                <div class="column row">-->
+<!--                    <div class="column">-->
+<!--                        <div class="ui indicating progress" data-value="1" data-total="3" id="progresso">-->
+<!--                            <div class="bar"></div>-->
+<!--                            <div class="label">Funding</div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <div class="column row">
+                    <div class="column">
+                        <div class="field">
+                            <label>Log</label>
+                            <textarea name="log" id="log" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column row center aligned">
+                    <div class="column">
+                        <div class="ui warning message" id="erro">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Campos Vazios!
+                            </div>
+                            Informe todos os campos solicitados
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column row center aligned">
+                    <div class="column">
+                        <div class="ui success message" id="sucesso">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Nova Transação
+                            </div>
+                            Transação <strong id="name_new_transation"></strong> criada!
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
