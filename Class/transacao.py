@@ -16,6 +16,9 @@ class transacao:
     def write_item(self, transaction, item, value):
         self.data_items_of_transactions_list[int(transaction[-1]) - 1][item] = value
 
+    def get_transactions_names(self):
+        return self.transactions_names
+
     # a logica principal que usarei nessa classe: os valores do data_items pra essa transacao é atualizada
     # logo depois é passado para o data_items do data_item_lock_manager, assim, caso em algum momento, alguma outra
     # transacao, vá utilizar um valor que havia sido lido antes de uma outra transação mudar, o programa poderá
