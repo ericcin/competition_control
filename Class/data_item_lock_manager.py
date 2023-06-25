@@ -17,9 +17,15 @@ class dataItemLockManager:
     # lock compartilhado
     def read_lock(self, data_item, transaction):
         if self.has_exclusive_lock(data_item) == True:
-            self.get_error(data_item, transaction, 'read_lock', 'write_lock', self.lock_register[self.array_position][3])
-            return ("Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo:" +
-                    str(self.lock_register[self.array_position]))
+            if self.lock_register[self.array_position][3][0] == transaction:
+                self.decrement_lock(data_item, transaction)
+                return ("Decremento de Look realizado em " + data_item +
+                        " pela transação "
+                        + str(self.lock_register[self.array_position][3][0]))
+            else:
+                self.get_error(data_item, transaction, 'read_lock', 'write_lock', self.lock_register[self.array_position][3])
+                return ("Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo:" +
+                        str(self.lock_register[self.array_position]))
         else:
             if self.has_shared_lock(data_item) == False:
                 self.create_lock_register(data_item, 'read_lock', 1, transaction)
@@ -30,7 +36,14 @@ class dataItemLockManager:
     # lock exclusivo
     def write_lock(self, data_item, transaction):
         if self.has_shared_lock(data_item) == True:
-            return ("Impossível realizar lock exclusivo em " + data_item +
+            if len(self.lock_register[self.array_position][3]) == 1 and self.lock_register[self.array_position][3][0] == transaction:
+                self.increment_lock(data_item, transaction)
+                return ("Incremento de Look realizado em " + data_item +
+                        " pela transação "
+                        + str(self.lock_register[self.array_position][3][0]))
+
+            else:
+                return ("Impossível realizar lock exclusivo em " + data_item +
                     " pois ele possui bloqueio compartilhado pelas transações: "
                     + str(self.lock_register[self.array_position][3]))
         else:
@@ -55,11 +68,13 @@ class dataItemLockManager:
             return ('A ' + transaction + ' não pode realizar desbloqueio no dado '
                     + data_item + ' pois ela não possui bloqueio sobre o dado!')
 
-    def increment_lock(self):
-        pass
+    def increment_lock(self, data_item, transaction):
+        self.lock_register[self.array_position][1] = 'write_lock'
+        self.insert_in_complete_lock_register(data_item, 'increment: write_lock', 1, transaction)
 
-    def decrement_lock(self):
-        pass
+    def decrement_lock(self, data_item, transaction):
+        self.lock_register[self.array_position][1] = 'read_lock'
+        self.insert_in_complete_lock_register(data_item, 'decrement: read_lock', 1, transaction)
 
     def create_lock_register(self, data_item, lock, number_of_locks, transaction):
         self.lock_register.append([data_item, lock, number_of_locks, [transaction]])
@@ -150,6 +165,7 @@ class dataItemLockManager:
     def write_item(self, transaction, item, value):
         if self.transaction_has_write_lock_in_specific_item(transaction, item):
             self.data_items[item] = value
+            self.insert_in_complete_lock_register(item, 'write_item', 1, transaction)
             return True
             # return 'Escrita de item feita no item ' + item + 'para a ' + transaction + '!'
         else:
@@ -168,6 +184,7 @@ class dataItemLockManager:
 
     def solve_error(self):
         for i in self.errors:
+            pass
 
 
 

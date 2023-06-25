@@ -1,7 +1,7 @@
-lista = [['isso', [1,2]]]
+lista = [['isso', [1]]]
 
 print(len(lista[0][1]))
 
-lista[0][1].remove(2)
+
 
 print(lista)

@@ -27,6 +27,7 @@ def unlock(data_item, transaction):
 def read_item(transaction_name, item):
     if data_item_lock_manager.can_read_item(transaction_name, item):
         transacoes.read_item(transaction_name, item, data_item_lock_manager.data_items)
+        data_item_lock_manager.insert_in_complete_lock_register(item, 'read_item', 1, transaction_name)
         return 'Leitura de item realizada no item ' + item + ' para a ' + transaction_name + '!'
     else:
         return ('Leitura de item não realizada, pois a ' + transaction_name + ' não possui bloqueio sobre o item ' +
