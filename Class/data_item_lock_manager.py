@@ -8,6 +8,7 @@ class dataItemLockManager:
         self.lock_register = []
         self.complete_lock_register = []
         self.array_position = None
+        self.errors = []
 
     def create_transaction_name(self):
         self.count = self.count + 1
@@ -16,6 +17,7 @@ class dataItemLockManager:
     # lock compartilhado
     def read_lock(self, data_item, transaction):
         if self.has_exclusive_lock(data_item) == True:
+            self.get_error(data_item, transaction, 'read_lock', 'write_lock', self.lock_register[self.array_position][3])
             return ("Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo:" +
                     str(self.lock_register[self.array_position]))
         else:
@@ -52,6 +54,12 @@ class dataItemLockManager:
         else:
             return ('A ' + transaction + ' não pode realizar desbloqueio no dado '
                     + data_item + ' pois ela não possui bloqueio sobre o dado!')
+
+    def increment_lock(self):
+        pass
+
+    def decrement_lock(self):
+        pass
 
     def create_lock_register(self, data_item, lock, number_of_locks, transaction):
         self.lock_register.append([data_item, lock, number_of_locks, [transaction]])
@@ -153,3 +161,13 @@ class dataItemLockManager:
         now = datetime.now()
         date_time = now.strftime('%d/%m/%Y %H:%M')
         return date_time
+
+    # acima, ja ta tudo funcionando
+    def get_error(self, data_item, transaction, attempted_action, cause, transaction_in_cause):
+        self.errors.append([data_item, transaction, attempted_action, cause, transaction_in_cause])
+
+    def solve_error(self):
+        for i in self.errors:
+
+
+
