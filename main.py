@@ -31,7 +31,7 @@ def read_item(transaction_name, item):
         return {'text': 'Leitura de item realizada no item ' + item + ' para a ' + transaction_name + '!',
                 'value': True}
     else:
-        data_item_lock_manager.get_error()
+        data_item_lock_manager.get_error(item, transaction_name, 'read_item', 'write_lock', None, None)
         return {
             'text': 'Leitura de item não realizada, pois a ' + transaction_name + ' não possui bloqueio sobre o item ' +
                     item + '!', 'value': False}
@@ -60,6 +60,8 @@ def write_item(transaction_name, item_to_be_changed, item_one, item_two, arithme
             return {'text': 'Escrita de item feita no item ' + item_to_be_changed + 'para a ' + transaction_name + '!',
                     'value': True}
         else:
+            data_item_lock_manager.get_error(item_to_be_changed, transaction_name, 'write_item', 'write_lock', item_one,
+                                             item_two)
             return {'text': 'Escrita de item não realizada, pois a ' + transaction_name + \
                             ' não possui bloqueio exclusivo sobre o item ' + item_to_be_changed + '!', 'value': False}
     else:
@@ -69,14 +71,16 @@ def write_item(transaction_name, item_to_be_changed, item_one, item_two, arithme
 def write_item_with_two_non_numeric_items(transaction_name, item_to_be_changed, item_one, item_two, arithmetic_sign):
     query_one = check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_changed, item_one)
     if not query_one:
+        data_item_lock_manager.get_error(item_to_be_changed, transaction_name, 'write_item', 'item_one', item_one,
+                                         item_two)
         return {'text': item_to_be_changed + " não pode ser atualizado, para realizar essa ação, faça leitura do valor "
-                                             "atualizado de " + item_one + " para a " + transaction_name + "!",
-                'value': False}
+                                    "atualizado de " + item_one + " para a " + transaction_name + "!", 'value': False}
     query_two = check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_changed, item_two)
     if not query_two:
+        data_item_lock_manager.get_error(item_to_be_changed, transaction_name, 'write_item', 'item_two', item_one,
+                                         item_two)
         return {'text': item_to_be_changed + " não pode ser atualizado, para realizar essa ação, faça leitura do valor "
-                                             "atualizado de " + item_two + " para a " + transaction_name + "!",
-                'value': False}
+                                    "atualizado de " + item_two + " para a " + transaction_name + "!", 'value': False}
     if query_one and query_two:
         query_three = check_if_non_numeric_item_have_1_length(item_one)
         if query_three:
@@ -84,8 +88,7 @@ def write_item_with_two_non_numeric_items(transaction_name, item_to_be_changed, 
         else:
             return {
                 'text': 'Erro crítico! O item um: ' + item_one + ' possui mais de 1 carácter. Refaça a operação '
-                                                                 'levando em conta itens de dados com apenas um caractere',
-                'value': False}
+                                            'levando em conta itens de dados com apenas um caractere', 'value': False}
 
         query_four = check_if_non_numeric_item_have_1_length(item_two)
         if query_four:
@@ -93,8 +96,7 @@ def write_item_with_two_non_numeric_items(transaction_name, item_to_be_changed, 
         else:
             return {
                 'text': 'Erro crítico! O item um: ' + item_two + ' possui mais de 1 carácter. Refaça a operação levando'
-                                                                 'em conta itens de dados com apenas um caractere',
-                'value': False}
+                                                'em conta itens de dados com apenas um caractere', 'value': False}
         if query_three and query_four:
             value = item_one + arithmetic_sign + item_two
             value = eval(value)
@@ -105,10 +107,10 @@ def write_item_with_one_numeric_item(transaction_name, item_to_be_changed, item_
     if not check_if_a_item_in_write_item_is_numeric(item_one):
         query_one = check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_changed, item_one)
         if not query_one:
+            data_item_lock_manager.get_error(item_to_be_changed, transaction_name, 'write_item', 'item_one', item_one, item_two)
             return {
                 'text': item_to_be_changed + " não pode ser atualizado, para realizar essa ação, faça leitura do valor "
-                                             "atualizado de " + item_one + " para a " + transaction_name + "!",
-                'value': False}
+                                    "atualizado de " + item_one + " para a " + transaction_name + "!", 'value': False}
         else:
             query_three = check_if_non_numeric_item_have_1_length(item_one)
             if query_three:
@@ -119,17 +121,16 @@ def write_item_with_one_numeric_item(transaction_name, item_to_be_changed, item_
             else:
                 return {
                     'text': 'Erro crítico! O item um: ' + item_one + ' possui mais de 1 carácter. '
-                                                                     'Refaça a operação levando '
-                                                                     'em conta itens de dados com apenas um caractere',
-                    'value': False}
+                    'Refaça a operação levando ' 'em conta itens de dados com apenas um caractere', 'value': False}
 
     if not check_if_a_item_in_write_item_is_numeric(item_two):
         query_two = check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_changed, item_two)
         if not query_two:
+            data_item_lock_manager.get_error(item_to_be_changed, transaction_name, 'write_item', 'item_two', item_one,
+                                             item_two)
             return {
                 'text': item_to_be_changed + " não pode ser atualizado, para realizar essa ação, faça leitura do valor "
-                                             "atualizado de " + item_two + " para a " + transaction_name + "!",
-                'value': False}
+                                    "atualizado de " + item_two + " para a " + transaction_name + "!", 'value': False}
         else:
             query_four = check_if_non_numeric_item_have_1_length(item_two)
             if query_four:
@@ -140,8 +141,7 @@ def write_item_with_one_numeric_item(transaction_name, item_to_be_changed, item_
             else:
                 return {
                     'text': 'Erro crítico! O item dois: ' + item_two + 'possui mais de 1 carácter. '
-                                                                       'Refaça a operação levando em conta itens de dados com apenas um caractere',
-                    'value': False}
+                    'Refaça a operação levando em conta itens de dados com apenas um caractere', 'value': False}
 
 
 def write_item_with_two_numeric_itens(transaction_name, item_to_be_changed, item_one, item_two, arithmetic_sign):
@@ -185,7 +185,11 @@ def solve_write_and_read_item_errors():
                         read_lock(i[0], i[1])
                         read_item(i[1], i[0])
                         write_item(i[1], i[0], i[4], i[5])
-
+                if i[3] == 'read_lock':
+                    data_item_lock_manager.has_shared_lock(i[0])
+                    for j in data_item_lock_manager.lock_register[data_item_lock_manager.array_position][3]:
+                        data_item_lock_manager.unlock(i[0], j)
+                    write_lock(i[0], i[1])
 
 def check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_changed, item):
     if transacoes.data_items_of_transactions_list[int(transaction_name[-1]) - 1][item] == \
@@ -194,10 +198,8 @@ def check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_ch
     else:
         return False
 
-
 def check_if_a_item_in_write_item_is_numeric(item):
     return item.isnumeric()
-
 
 def check_if_non_numeric_item_have_1_length(item):
     if not item.isdigit():

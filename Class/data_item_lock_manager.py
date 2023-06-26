@@ -23,7 +23,7 @@ class dataItemLockManager:
                          " pela transação "
                          + str(self.lock_register[self.array_position][3][0]), 'value': True}
             else:
-                self.get_error(data_item, transaction, 'read_lock', 'write_lock', self.lock_register[self.array_position][3])
+                self.get_error(data_item, transaction, 'read_lock', 'write_lock', None, None)
                 return {'text': "Impossível realizar lock compartilhado em " + data_item + " pois ele possui bloqueio exclusivo:" +
                      str(self.lock_register[self.array_position]), 'value': False}
         else:
@@ -43,6 +43,7 @@ class dataItemLockManager:
                          + str(self.lock_register[self.array_position][3][0]), 'value': True}
 
             else:
+                self.get_error(data_item, transaction, 'write_lock', 'read_lock', None, None)
                 return {'text': "Impossível realizar lock exclusivo em " + data_item +
                          " pois ele possui bloqueio compartilhado pelas transações: "
                          + str(self.lock_register[self.array_position][3]), 'value': False}
@@ -149,6 +150,7 @@ class dataItemLockManager:
         if transaction in self.lock_register[self.array_position][3]:
             return {'text': 'Lock exclusivo em ' + data_item + ' já está sendo realizado pela ' + transaction, 'value': False}
         else:
+            self.get_error(data_item, transaction, 'write_lock', 'write_lock', None, None)
             return {'text': 'Impossível realizar Lock exclusivo em ' + data_item
                      + ' pois ele já possui lock exclusivo realizado pela '
                      + str(self.lock_register[self.array_position][3]), 'value': False}

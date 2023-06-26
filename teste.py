@@ -22,3 +22,8 @@ c = 20
 d = 30
 
 print(isinstance(a,int))
+
+def aleatory(entrada, outraentrada, ultima):
+    print(entrada)
+
+aleatory('oi', None, None)
