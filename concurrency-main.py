@@ -18,6 +18,8 @@ from lock_manager_dispatching import init_lock_manager, lock_manager_dispatcher
 from transaction_manager_dispatching import init_transaction_manager, transaction_manager_dispatcher
 from settings import debug_message, info_message, init_logger
 
+port_for_2pl = 5001
+
 logger = init_logger(__name__)
 
 app = flask.Flask(__name__)
@@ -49,6 +51,10 @@ def preprocess_request() -> None:
 @app.route("/")
 def index():
     return flask.render_template("index.html")
+
+@app.route("/communication.js")
+def communication():
+    return flask.render_template("communication.js", port = port_for_2pl)
 
 
 #  flask.send_file(
@@ -111,7 +117,7 @@ def transaction_manager():
 
 def main() -> None:
     info_message(f"main: Flask version: {flask.__version__}")
-    app.run()
+    app.run(port = port_for_2pl)
 
 
 if __name__ == "__main__":

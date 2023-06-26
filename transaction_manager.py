@@ -137,7 +137,7 @@ class Transaction:
                     self.phase = "Shrinking"
                 else:
                     for query in pending_queries:
-                        query.get_lock()
+                        query.get_lock()    
                     situation = "EXECUTING"
 
             elif self.phase == "Shrinking":
