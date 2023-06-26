@@ -184,7 +184,26 @@ class dataItemLockManager:
 
     def solve_error(self):
         for i in self.errors:
-            pass
+            if i[2] == 'read_lock':
+                self.has_exclusive_lock(i[0])
+                self.unlock(i[0], self.lock_register[self.array_position][3][0])
+                self.read_lock(i[0], i[1])
+
+            if i[2] == 'write_lock':
+                if i[3] == 'read_lock':
+                    self.has_shared_lock(i[0])
+                    for j in self.lock_register[self.array_position][3]:
+                        self.unlock(i[0], j)
+                    self.write_lock(i[0], i[1])
+
+                if i[3] == 'write_lock':
+                    self.has_exclusive_lock(i[0])
+                    self.unlock(i[0], self.lock_register[self.array_position][3][0])
+                    self.write_lock(i[0], i[1])
+
+            if i[2] == 'read_item':
+                if i[3]:
+                    pass
 
 
 
