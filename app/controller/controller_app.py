@@ -42,7 +42,7 @@ def realizar_acao():
     elif action == "write_lock":
         result = main.write_lock(item, transaction)
     elif action == "write_item":
-        result = main.write_item(transaction, item, value1, value2, "0")
+        result = main.write_item(transaction, item, value1, value2, operator)
     elif action == "unlock":
         result = main.unlock(item, transaction)
     else:

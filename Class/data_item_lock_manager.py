@@ -179,31 +179,31 @@ class dataItemLockManager:
         return date_time
 
     # acima, ja ta tudo funcionando
-    def get_error(self, data_item, transaction, attempted_action, cause, transaction_in_cause):
-        self.errors.append([data_item, transaction, attempted_action, cause, transaction_in_cause])
+    def get_error(self, data_item, transaction, attempted_action, cause, item_one_in_write_item,
+                  item_two_in_write_item):
+        self.errors.append([data_item, transaction, attempted_action, cause, item_one_in_write_item,
+                            item_two_in_write_item])
 
     def solve_error(self):
-        for i in self.errors:
-            if i[2] == 'read_lock':
-                self.has_exclusive_lock(i[0])
-                self.unlock(i[0], self.lock_register[self.array_position][3][0])
-                self.read_lock(i[0], i[1])
-
-            if i[2] == 'write_lock':
-                if i[3] == 'read_lock':
-                    self.has_shared_lock(i[0])
-                    for j in self.lock_register[self.array_position][3]:
-                        self.unlock(i[0], j)
-                    self.write_lock(i[0], i[1])
-
-                if i[3] == 'write_lock':
+        if self.errors != []:
+            for i in self.errors:
+                if i[2] == 'read_lock':
                     self.has_exclusive_lock(i[0])
                     self.unlock(i[0], self.lock_register[self.array_position][3][0])
-                    self.write_lock(i[0], i[1])
+                    self.read_lock(i[0], i[1])
 
-            if i[2] == 'read_item':
-                if i[3]:
-                    pass
+                if i[2] == 'write_lock':
+                    if i[3] == 'read_lock':
+                        self.has_shared_lock(i[0])
+                        for j in self.lock_register[self.array_position][3]:
+                            self.unlock(i[0], j)
+                        self.write_lock(i[0], i[1])
+
+                    if i[3] == 'write_lock':
+                        self.has_exclusive_lock(i[0])
+                        self.unlock(i[0], self.lock_register[self.array_position][3][0])
+                        self.write_lock(i[0], i[1])
+
 
 
 
