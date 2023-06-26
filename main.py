@@ -69,14 +69,14 @@ def write_item_with_two_non_numeric_items(transaction_name, item_to_be_changed, 
     if query_one and query_two:
         query_three = check_if_non_numeric_item_have_1_length(item_one)
         if query_three:
-            item_one = str(data_item_lock_manager[item_one])
+            item_one = str(data_item_lock_manager.data_items[item_one])
         else:
             return ('Erro crítico! O item um: ' + item_one + ' possui mais de 1 carácter. Refaça a operação levando'
                                                              'em conta itens de dados com apenas um caractere')
 
         query_four = check_if_non_numeric_item_have_1_length(item_two)
         if query_four:
-            item_two = str(data_item_lock_manager[item_two])
+            item_two = str(data_item_lock_manager.data_items[item_two])
         else:
             return ('Erro crítico! O item um: ' + item_two + ' possui mais de 1 carácter. Refaça a operação levando'
                                                              'em conta itens de dados com apenas um caractere')
@@ -94,7 +94,7 @@ def write_item_with_one_numeric_item(transaction_name, item_to_be_changed, item_
         else:
             query_three = check_if_non_numeric_item_have_1_length(item_one)
             if query_three:
-                item_one = str(data_item_lock_manager[item_one])
+                item_one = str(data_item_lock_manager.data_items[item_one])
                 value = item_one + arithmetic_sign + item_two
                 value = eval(value)
                 return value
@@ -110,7 +110,7 @@ def write_item_with_one_numeric_item(transaction_name, item_to_be_changed, item_
         else:
             query_four = check_if_non_numeric_item_have_1_length(item_two)
             if query_four:
-                item_two = str(data_item_lock_manager[item_two])
+                item_two = str(data_item_lock_manager.data_items[item_two])
                 value = item_one + arithmetic_sign + item_two
                 value = eval(value)
                 return value
