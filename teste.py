@@ -16,9 +16,9 @@
 # conta_two = eval(conta_two)
 # print(conta_two)
 
-texto = '12345567a'
+a = '12'
+b = 15
+c = 20
+d = 30
 
-print(texto.isdigit())
-
-outro = '3'
-print(len(outro))
+print(isinstance(a,int))
