@@ -113,10 +113,13 @@ function active_action () {
             data: { 'transaction': transaction, 'action': action, 'item': item, 'value1': value1, 'operator': operator, 'value2': value2},
             success: function (resposta) {
                 let resultado = JSON.parse(resposta)
-                console.log(resultado['result'])
-                $("#log").val($("#log").val() + "\n" + resultado['result'])
+                result = resultado['result']
+                console.log(result)
 
-                $('#log' + transaction).append(action + '(' + item.toUpperCase() +');\n' + calculo)
+                $("#log").val($("#log").val() + "\n" + result['text'])
+
+                if(result['value'] == true)
+                    $('#log' + transaction).append(action + '(' + item.toUpperCase() +');\n' + calculo)
             },
         });
     } else
