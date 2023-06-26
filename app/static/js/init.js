@@ -8,13 +8,15 @@ $.ajax({
     method: 'GET',
     url: '/get_itens/',
     success: function (resposta) {
-        let itens = ''
+        let itens = '';
+        let itens2 = '';
         for(let i = 0; i < resposta.length; i++){
-            itens += '<div class="item" data-value="' + resposta[i] + '">' + resposta[i].toUpperCase() + '</div>'
+            itens += '<div class="item" data-value="' + resposta[i] + '">' + resposta[i].toUpperCase() + '</div>';
+            itens2 += '<option class="item" value="' + resposta[i] + '">';
         }
         $("#menu_item").html(itens)
-        $("#menu_value1").html(itens)
-        $("#menu_value2").html(itens)
+        $("#menu_value1").html(itens2)
+        $("#menu_value2").html(itens2)
     },
 });
 

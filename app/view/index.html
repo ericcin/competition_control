@@ -90,9 +90,9 @@
 
             </div>
 
-            <div class="column row">
+            <div class="column row" style="margin-top: 6rem">
                 <div class="column">
-                    <table class="ui celled table">
+                    <table class="ui very basic collapsing table">
                         <thead>
                         <tr id="coluna"></tr>
                         </thead>
@@ -168,20 +168,27 @@
                     </div>
                     <label for="selected_item">Item Selecionado</label>
                 </div>
+                <!--                <div class="field">-->
+                <!--                    <div class="ui input">-->
+                <!--                        <div class="ui selection dropdown">-->
+                <!--                            <input type="hidden" name="value1" id="value1">-->
+                <!--                            <i class="dropdown icon"></i>-->
+                <!--                            <div class="default text">Valor 1</div>-->
+                <!--                            <div class="menu" id="menu_value1">-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        &lt;!&ndash;                        <input type="number" id="value1" placeholder="Valor 1">&ndash;&gt;-->
+                <!--                    </div>-->
+                <!--                    <label for="value1">Valor 1</label>-->
+                <!--                </div>-->
                 <div class="field">
                     <div class="ui input">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="value1" id="value1">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Valor 1</div>
-                            <div class="menu" id="menu_value1">
-                            </div>
-                        </div>
-                        <!--                        <input type="number" id="value1" placeholder="Valor 1">-->
+                        <input list="menu_value2" type="text" name="value2" id="value1">
+                        <datalist class="menu" id="menu_value1">
+                        </datalist>
                     </div>
-                    <label for="value1">Valor 1</label>
+                    <label for="value2">Valor 1</label>
                 </div>
-
                 <div class="field">
                     <div class="ui selection dropdown">
                         <input type="hidden" name="operator" id="operator">
@@ -196,19 +203,27 @@
                     </div>
                     <label for="operator">Operador Aritmético</label>
                 </div>
+                <!--                <div class="field">-->
+                <!--                    <div class="ui input">-->
+                <!--                        <div class="ui fluid search selection dropdown">-->
+                <!--                            <input type="hidden" name="value2" id="value2">-->
+                <!--                            <i class="dropdown icon"></i>-->
+                <!--                            <div class="default text">Valor 2</div>-->
+                <!--                            <div class="menu" id="menu_value2">-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                    <label for="value2">Valor 2</label>-->
+                <!--                </div>-->
                 <div class="field">
                     <div class="ui input">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="value2" id="value2">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Valor 2</div>
-                            <div class="menu" id="menu_value2">
-                            </div>
-                        </div>
-                        <!--                        <input type="number" id="value2" placeholder="Valor 2">-->
+                        <input list="menu_value2" type="text" name="value2" id="value2">
+                        <datalist class="menu" id="menu_value2">
+                        </datalist>
                     </div>
                     <label for="value2">Valor 2</label>
                 </div>
+
             </div>
         </div>
 
