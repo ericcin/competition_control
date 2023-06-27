@@ -68,13 +68,13 @@ def load_settings() -> Dict[str, str]:
 def inspect_type(variable: Any) -> str:
     if isinstance(variable, dict):
         # Check the types of the dictionary's values
-        value_types = [f"{value}({inspect_type(value)})" for value in variable.values()]
-        result = f"dict[{', '.join(value_types)}]"
+        value_types = [f"{inspect_type(key)}: {inspect_type(variable[key])}" for key in variable.keys()]
+        result = f"Dict{{ {', '.join(value_types)} }}"
     elif isinstance(variable, list):
-        value_types = [f"{value}({inspect_type(value)})" for value in variable]
-        result = f"list{value_types}"
+        value_types = [f"{value} ({inspect_type(value)})" for value in variable]
+        result = f"List[ {value_types} ]"
     else:
-        result = f"{variable}({type(variable).__name__})"
+        result = f"{variable} ({type(variable).__name__})"
     return result
 
 def inspect_structure(variable: Any) -> str:

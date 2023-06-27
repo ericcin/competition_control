@@ -51,6 +51,9 @@ function onReady() {
     // Setar data items
     $('#setDataItemsButton').click(setDataItems);
 
+    // Inserir transação
+    $('#insertTransactionButton').click(insertTransaction);
+
     // Step Into
     $('#stepIntoTransactionButton').click(stepInto);
 }

@@ -20,35 +20,14 @@ function transactionManager(requestData, successCallbackFunction) {
   goPost("/TransactionManager", requestData, successCallbackFunction)
 }
 
-function updateDataItemTable(data) {
-  scrutinize(data, place = 'updateDataItemTable')
-  var jsonTable = jsonToHtmlTable(pythonListToJSON("Item de Dados", data));
-  scrutinize(jsonTable, variableName = 'jsonTable', place = 'updateDataItemTable')
-  $('#dataItemTableContainer').empty().append(jsonTable);
-}
-
-function updateTransactionTable(data) {
-  scrutinize(data, palce = 'updateTransactionTable')
-  var jsonTable = jsonToHtmlTable(pythonListToJSON("Transação", data));
-  scrutinize(jsonTable, variableName = 'jsonTable', place = 'updateTransactionTable')
-  $('#transactionTableContainer').empty().append(jsonTable);
-}
-
-function updateLocksTable(data) {
-  scrutinize(data, variableName = 'data', place = 'updateLocksTable')
-  var jsonTable = jsonToHtmlTable(data);
-  scrutinize(jsonTable, variableName = 'jsonTable', place = 'updateLocksTable')
-  $('#lockTableContainer').empty().append(jsonTable);
-}
-
 function listDataItems() {
   var requestData = {
     method: 'list_data_items',
     message: '{}',
   }
 
-  scrutinize(requestData.message, "message", 'listDataItems');
-  scrutinize(requestData, "requestData", 'listDataItems');
+  //scrutinize(requestData.message, "message", 'listDataItems');
+  //scrutinize(requestData, "requestData", 'listDataItems');
 
   lockManager(requestData, updateDataItemTable);
 }
@@ -62,7 +41,7 @@ function listTransactions() {
   scrutinize(requestData.message, "message", 'listTransactions');
   scrutinize(requestData, "requestData", 'listTransactions');
 
-  transactionManager(requestData, updateTransactionTable);
+  transactionManager(requestData, updateTransactionTables);
 }
 
 function listLocks() {
@@ -83,10 +62,22 @@ function setDataItems() {
     message: { data_items: eval($('#dataItemText').val()) },
   }
 
-  scrutinize(requestData.message, "message", 'setDataItems');
-  scrutinize(requestData, "requestData", 'setDataItems');
+  //scrutinize(requestData.message, "message", 'setDataItems');
+  //scrutinize(requestData, "requestData", 'setDataItems');
 
   lockManager(requestData, updateDataItemTable);
+}
+
+function insertTransaction() {
+  var requestData = {
+    method: 'add_transaction',
+    message: { transaction_string: $('#transactionText').val() },
+  }
+
+  //scrutinize(requestData.message, "message", 'insertTransaction');
+  //scrutinize(requestData, "requestData", 'insertTransaction');
+
+  transactionManager(requestData, updateTransactionTables);
 }
 
 function stepInto() {
@@ -98,5 +89,5 @@ function stepInto() {
   scrutinize(requestData.message, "message", 'stepInto');
   scrutinize(requestData, "requestData", 'stepInto');
 
-  transactionManager(requestData, updateLocksTable);
+  transactionManager(requestData, updateTransactionTables);
 }
