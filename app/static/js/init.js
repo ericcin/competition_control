@@ -157,23 +157,23 @@ function update_locks () {
 
 }
 
-$('#btnResolverImpasse').click(function () {
-
-    $.ajax({
-            method: 'POST',
-            url: '/solve_errors/',
-//            data: { 'transaction': transaction, 'action': action, 'item': item, 'value1': value1, 'operator': operator, 'value2': value2},
-            success: function (resposta) {
-                let resultado = JSON.parse(resposta);
-                console.log(resultado['result']);
-                let result = resultado['result'];
-                for(r in result){
-                    $('#log').val($('#log').val() + "\n" + result[r]['text']);
-                }
-            },
-        });
-
-});
+//$('#btnResolverImpasse').click(function () {
+//
+//    $.ajax({
+//            method: 'POST',
+//            url: '/solve_errors/',
+////            data: { 'transaction': transaction, 'action': action, 'item': item, 'value1': value1, 'operator': operator, 'value2': value2},
+//            success: function (resposta) {
+//                let resultado = JSON.parse(resposta);
+//                console.log(resultado['result']);
+//                let result = resultado['result'];
+//                for(r in result){
+//                    $('#log').val($('#log').val() + "\n" + result[r]['text']);
+//                }
+//            },
+//        });
+//
+//});
 
 $('#btnRegistro').click(function () {
 
