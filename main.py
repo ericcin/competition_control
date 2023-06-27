@@ -29,8 +29,10 @@ def read_lock(data_item, transaction):
 
 
 def unlock(data_item, transaction):
-    return data_item_lock_manager.unlock(data_item, transaction)
-
+    output = data_item_lock_manager.unlock(data_item, transaction)
+    if output ['a']:
+        pass
+    return output
 
 def read_item(transaction_name, item):
     if data_item_lock_manager.can_read_item(transaction_name, item):

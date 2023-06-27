@@ -4,7 +4,8 @@ class transacao:
         self.data_items = {chave: 0 for chave in data_items_names_list}
         self.transactions_names = []
         self.data_items_of_transactions_list = []
-
+        self.crescimento = []
+        self.encolhimeto = []
     def get_new_transaction(self, transaction_name):
         self.transactions_names.append(transaction_name)
         self.data_items_of_transactions_list.append(self.data_items)
