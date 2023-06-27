@@ -164,8 +164,12 @@ $('#btnResolverImpasse').click(function () {
             url: '/solve_errors/',
 //            data: { 'transaction': transaction, 'action': action, 'item': item, 'value1': value1, 'operator': operator, 'value2': value2},
             success: function (resposta) {
-//                let resultado = JSON.parse(resposta)
-
+                let resultado = JSON.parse(resposta);
+                console.log(resultado['result']);
+                let result = resultado['result'];
+                for(r in result){
+                    $('#log').val($('#log').val() + "\n" + result[r]['text']);
+                }
             },
         });
 

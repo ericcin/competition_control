@@ -213,7 +213,7 @@ class dataItemLockManager:
                         outputs.append(self.write_lock(i[0], i[1]))
 
         if outputs != []:
-            output = ''
-            for i in outputs:
-                output = output + str(i) + '\n'
-            return {'text': output, 'value': True}
+            # output = ''
+            # for i in outputs:
+            #     output = output + str(i) + '\n'
+            return outputs
