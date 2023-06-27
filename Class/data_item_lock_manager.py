@@ -136,10 +136,7 @@ class dataItemLockManager:
                 if data_item in i and 'read_lock' in i:
                     self.array_position = pos
                     return True
-                else:
-                    return False
-        else:
-            return False
+        return False
 
     def has_exclusive_lock(self, data_item):
         if self.lock_register != []:
@@ -147,10 +144,7 @@ class dataItemLockManager:
                 if data_item in i and 'write_lock' in i:
                     self.array_position = pos
                     return True
-                else:
-                    return False
-        else:
-            return False
+        return False
 
     def check_transaction_in_read_lock(self, data_item, transaction):
         if transaction not in self.lock_register[self.array_position][3]:
