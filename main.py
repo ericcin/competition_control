@@ -168,46 +168,57 @@ def write_item_with_two_numeric_itens(transaction_name, item_to_be_changed, item
 
 
 def solve_errors():
-    solve_lock_errors()
-    solve_write_and_read_item_errors()
+    output_one = solve_lock_errors()
+    output_two = solve_write_and_read_item_errors()
 
+    if output_one != None:
+        return output_one
+
+    if output_two != None:
+        return output_two
 
 def solve_lock_errors():
-    data_item_lock_manager.solve_error()
-
+    output_one = data_item_lock_manager.solve_error()
+    return output_one
 
 def solve_write_and_read_item_errors():
     # [data_item, transaction, attempted_action, cause, item_one_in_write_item, item_two_in_write_item]
+    outputs = []
     if data_item_lock_manager.errors != []:
         for i in data_item_lock_manager.errors:
             if i[2] == 'read_item':
-                read_lock(i[0], i[1])
-                read_item(i[1], i[0])
+                outputs.append(read_lock(i[0], i[1]))
+                outputs.append(read_item(i[1], i[0]))
             if i[2] == 'write_item':
                 if i[3] == 'item_one':
                     if i[0] == i[4]:
-                        write_lock(i[0], i[1])
-                        read_item(i[1], i[0])
-                        write_item(i[1], i[0], i[4], i[5])
+                        outputs.append(write_lock(i[0], i[1]))
+                        outputs.append(read_item(i[1], i[0]))
+                        outputs.append(write_item(i[1], i[0], i[4], i[5]))
                     else:
-                        read_lock(i[0], i[1])
-                        read_item(i[1], i[0])
-                        write_item(i[1], i[0], i[4], i[5])
+                        outputs.append(read_lock(i[0], i[1]))
+                        outputs.append(read_item(i[1], i[0]))
+                        outputs.append(write_item(i[1], i[0], i[4], i[5]))
                 if i[3] == 'item_two':
                     if i[0] == i[4]:
-                        write_lock(i[0], i[1])
-                        read_item(i[1], i[0])
-                        write_item(i[1], i[0], i[4], i[5])
+                        outputs.append(write_lock(i[0], i[1]))
+                        outputs.append(read_item(i[1], i[0]))
+                        outputs.append(write_item(i[1], i[0], i[4], i[5]))
                     else:
-                        read_lock(i[0], i[1])
-                        read_item(i[1], i[0])
-                        write_item(i[1], i[0], i[4], i[5])
+                        outputs.append(read_lock(i[0], i[1]))
+                        outputs.append(read_item(i[1], i[0]))
+                        outputs.append(write_item(i[1], i[0], i[4], i[5]))
                 if i[3] == 'read_lock':
                     data_item_lock_manager.has_shared_lock(i[0])
                     for j in data_item_lock_manager.lock_register[data_item_lock_manager.array_position][3]:
-                        data_item_lock_manager.unlock(i[0], j)
+                        outputs.append(data_item_lock_manager.unlock(i[0], j))
                     write_lock(i[0], i[1])
 
+    if outputs != []:
+        output = ''
+        for i in outputs:
+            output = output + str(i) + '\n'
+        return{'text': output, 'value': True}
 
 def check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_changed, item):
     if transacoes.data_items_of_transactions_list[int(transaction_name[-1]) - 1][item] == \
@@ -216,10 +227,8 @@ def check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_ch
     else:
         return False
 
-
 def check_if_a_item_in_write_item_is_numeric(item):
     return item.isnumeric()
-
 
 def check_if_non_numeric_item_have_1_length(item):
     if not item.isdigit():

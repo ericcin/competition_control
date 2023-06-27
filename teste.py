@@ -16,14 +16,34 @@
 # conta_two = eval(conta_two)
 # print(conta_two)
 
-a = '12'
-b = 15
-c = 20
-d = 30
+# a = '12'
+# b = 15
+# c = 20
+# d = 30
+#
+# print(isinstance(a,int))
+#
+# def aleatory(entrada, outraentrada, ultima):
+#     print(entrada)
+#
+# aleatory('oi', None, None)
 
-print(isinstance(a,int))
+outputs = ['Primeira linha', 'Segunda linha']
+output = ''
 
-def aleatory(entrada, outraentrada, ultima):
-    print(entrada)
+def find_output():
+    outputs = ['Primeira linha', 'Segunda linha']
+    output = ''
+    for i in outputs:
+        output = output + i + '\n'
+    if len(outputs) == 1:
+        return output
 
-aleatory('oi', None, None)
+print(find_output())
+
+if find_output() == None:
+    print('hi')
+
+isso = find_output()
+
+print('isso'+str(isso))
