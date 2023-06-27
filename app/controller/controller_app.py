@@ -46,6 +46,24 @@ def realizar_acao():
     elif action == "unlock":
         result = main.unlock(item, transaction)
     else:
-        return json.dumps({'status': '400'})
+        return json.dumps({'status': '400', 'result': ''})
 
     return json.dumps({'status': 'OK', 'result': result})
+
+
+@index.route("/solve_errors/", methods=['POST'])
+def solve_errors():
+    result = main.solve_errors()
+    if result == None:
+        return json.dumps({'status': 'OK'})
+    else:
+        return json.dumps({'status': 'OK', 'result': result})
+
+@index.route("/get_locks/", methods=['POST'])
+def get_locks():
+    return main.get_locks()
+
+
+@index.route("/get_complete_locks/", methods=['POST'])
+def get_complete_locks():
+    return main.get_complete_locks()

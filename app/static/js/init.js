@@ -4,19 +4,26 @@ $('.message .close').on('click', function() {
     $('.message').hide();
 });
 
+//$('.ui.sticky').sticky({
+//    context: '#example1'
+//});
+
 $.ajax({
     method: 'GET',
     url: '/get_itens/',
     success: function (resposta) {
         let itens = '';
         let itens2 = '';
+        let itens3 = '';
         for(let i = 0; i < resposta.length; i++){
             itens += '<div class="item" data-value="' + resposta[i] + '">' + resposta[i].toUpperCase() + '</div>';
             itens2 += '<option class="item" value="' + resposta[i] + '">';
+            itens3 += '<tr><td>' + resposta[i].toUpperCase() + '</td><td id="' + resposta[i] + '"></td></tr>';
         }
-        $("#menu_item").html(itens)
-        $("#menu_value1").html(itens2)
-        $("#menu_value2").html(itens2)
+        $("#menu_item").html(itens);
+        $("#menu_value1").html(itens2);
+        $("#menu_value2").html(itens2);
+        $("#itens_block").html(itens3);
     },
 });
 
@@ -41,7 +48,6 @@ $('#new_transaction').click(function () {
         url: '/new_transaction/',
         success: function (resposta) {
             let resultado = JSON.parse(resposta)
-            console.log(resultado['result'])
             let result = resultado['result'];
             $('#name_new_transation').html(result.toUpperCase());
             $('#sucesso').show();
@@ -113,13 +119,80 @@ function active_action () {
             data: { 'transaction': transaction, 'action': action, 'item': item, 'value1': value1, 'operator': operator, 'value2': value2},
             success: function (resposta) {
                 let resultado = JSON.parse(resposta)
-                console.log(resultado['result'])
-                $("#log").val($("#log").val() + "\n" + resultado['result'])
+                result = resultado['result']
+//                console.log(result)
 
-                $('#log' + transaction).append(action + '(' + item.toUpperCase() +');\n' + calculo)
+                $("#log").val($("#log").val() + "\n" + result['text'])
+
+                if(result['value'] == true){
+                    $('#log' + transaction).append(action + '(' + item.toUpperCase() +');\n' + calculo)
+                    if(action == 'read_lock' || action == 'write_lock')
+                        update_locks();
+                    else if(action == 'unlock'){
+                        $('#' + item).html("");
+                        update_locks();
+                    }
+
+                }
+
             },
         });
     } else
         $('#erro').show();
 
 };
+
+function update_locks () {
+
+    $.ajax({
+            method: 'POST',
+            url: '/get_locks/',
+            success: function (resposta) {
+                for(i in resposta) {
+                    r = resposta[i];
+                    $('#' + r[0]).html(""+ r[3])
+                }
+            },
+        });
+
+}
+
+//$('#btnResolverImpasse').click(function () {
+//
+//    $.ajax({
+//            method: 'POST',
+//            url: '/solve_errors/',
+////            data: { 'transaction': transaction, 'action': action, 'item': item, 'value1': value1, 'operator': operator, 'value2': value2},
+//            success: function (resposta) {
+//                let resultado = JSON.parse(resposta);
+//                console.log(resultado['result']);
+//                let result = resultado['result'];
+//                for(r in result){
+//                    $('#log').val($('#log').val() + "\n" + result[r]['text']);
+//                }
+//            },
+//        });
+//
+//});
+
+$('#btnRegistro').click(function () {
+
+    $.ajax({
+            method: 'POST',
+            url: '/get_complete_locks/',
+            success: function (resposta) {
+                  console.log(resposta);
+
+                  let complete_locks = '';
+                  for(i in resposta){
+                    r = resposta[i];
+                    complete_locks += '<tr><td>' + r[4] + '</td><td>' + r[3] + '</td><td>' + r[1].toUpperCase()
+                    + '</td><td>' + r[0].toUpperCase() + '</td></tr>';
+                  }
+
+                  $('#complete_locks').html(complete_locks);
+                  $('#modal_complete_locks').modal('show');
+            },
+        });
+
+});
