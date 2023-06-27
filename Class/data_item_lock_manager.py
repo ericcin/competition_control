@@ -123,10 +123,7 @@ class dataItemLockManager:
                 if transaction in i[3] and item in i and 'write_lock' in i:
                     self.array_position = pos
                     return True
-                else:
-                    return False
-        else:
-            return False
+        return False
 
     def has_shared_lock(self, data_item):
         if self.lock_register != []:
