@@ -4,19 +4,26 @@ $('.message .close').on('click', function() {
     $('.message').hide();
 });
 
+//$('.ui.sticky').sticky({
+//    context: '#example1'
+//});
+
 $.ajax({
     method: 'GET',
     url: '/get_itens/',
     success: function (resposta) {
         let itens = '';
         let itens2 = '';
+        let itens3 = '';
         for(let i = 0; i < resposta.length; i++){
             itens += '<div class="item" data-value="' + resposta[i] + '">' + resposta[i].toUpperCase() + '</div>';
             itens2 += '<option class="item" value="' + resposta[i] + '">';
+            itens3 += '<tr><td>' + resposta[i].toUpperCase() + '</td><td id="' + resposta[i] + '"></td></tr>';
         }
-        $("#menu_item").html(itens)
-        $("#menu_value1").html(itens2)
-        $("#menu_value2").html(itens2)
+        $("#menu_item").html(itens);
+        $("#menu_value1").html(itens2);
+        $("#menu_value2").html(itens2);
+        $("#itens_block").html(itens3);
     },
 });
 
@@ -118,11 +125,45 @@ function active_action () {
 
                 $("#log").val($("#log").val() + "\n" + result['text'])
 
-                if(result['value'] == true)
+                if(result['value'] == true){
                     $('#log' + transaction).append(action + '(' + item.toUpperCase() +');\n' + calculo)
+                    if(action == 'read_lock' || action == 'write_lock' || action == 'unlock')
+                        update_locks();
+                }
+
             },
         });
     } else
         $('#erro').show();
 
 };
+
+function update_locks () {
+
+    $.ajax({
+            method: 'POST',
+            url: '/get_locks/',
+            success: function (resposta) {
+                for(i in resposta) {
+                    r = resposta[i]
+                    console.log(r[3]);
+                    $('#' + r[0]).html(""+ r[3])
+                }
+            },
+        });
+
+}
+
+$('#btnResolverImpasse').click(function () {
+
+    $.ajax({
+            method: 'POST',
+            url: '/solve_errors/',
+//            data: { 'transaction': transaction, 'action': action, 'item': item, 'value1': value1, 'operator': operator, 'value2': value2},
+            success: function (resposta) {
+                let resultado = JSON.parse(resposta)
+
+            },
+        });
+
+});

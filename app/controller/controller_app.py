@@ -49,3 +49,13 @@ def realizar_acao():
         return json.dumps({'status': '400'})
 
     return json.dumps({'status': 'OK', 'result': result})
+
+
+@index.route("/solve_errors/", methods=['POST'])
+def solve_errors():
+    main.solve_errors()
+
+
+@index.route("/get_locks/", methods=['POST'])
+def get_locks():
+    return main.get_locks()

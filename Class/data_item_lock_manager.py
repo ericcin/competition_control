@@ -10,6 +10,9 @@ class dataItemLockManager:
         self.array_position = None
         self.errors = []
 
+    def get_locks(self):
+        return self.lock_register
+
     def create_transaction_name(self):
         self.count = self.count + 1
         return 't' + str(self.count)
