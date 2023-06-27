@@ -54,6 +54,7 @@ def realizar_acao():
 @index.route("/solve_errors/", methods=['POST'])
 def solve_errors():
     main.solve_errors()
+    return json.dumps({'status': 'OK'})
 
 
 @index.route("/get_locks/", methods=['POST'])
