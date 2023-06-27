@@ -115,8 +115,6 @@ class dataItemLockManager:
                 if transaction in i[3] and item in i:
                     self.array_position = pos
                     return True
-                else:
-                    return False
         return False
 
     def transaction_has_write_lock_in_specific_item(self, transaction, item):
