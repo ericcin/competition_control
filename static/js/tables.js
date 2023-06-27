@@ -53,6 +53,7 @@ function generateTransactionHTML(transactions) {
     }).join('');
     let operationsHTML = `<ol class="operation-list">${parsedCommandList}</ol>`;
     let locksHTML = transaction["locks"].length > 0 ? `<ul class="held-locks">${transaction["locks"]}</ul>` : "";
+    let killButtonHTML = `<button id="${transaction["id"]}" class="killButton">Matar</button>`
     transactionHTML += `<div class="transaction fly">${headerHTML}${phaseHTML}${statusHTML}<h3>Queries</h3>${operationsHTML}<h3>Bloqueios</h3>${locksHTML}</div>`;
   }
   return `<div class="transaction-container fly">${transactionHTML}</div>`;

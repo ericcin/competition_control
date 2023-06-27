@@ -56,5 +56,8 @@ function onReady() {
 
     // Step Into
     $('#stepIntoTransactionButton').click(stepInto);
+
+    $(".killButton").click(killButtonClickHandler);
+
 }
 $(document).ready(onReady);

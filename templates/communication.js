@@ -91,3 +91,14 @@ function stepInto() {
 
   transactionManager(requestData, updateTransactionTables);
 }
+
+function killButtonClickHandler() {
+
+  var requestData = {
+    method: 'reset',
+    message: { id: eval($(this).attr("id")) },
+  }
+
+  transactionManager(requestData, updateTransactionTables);
+
+}
