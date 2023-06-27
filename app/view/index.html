@@ -22,21 +22,21 @@
     <div class="right ui rail" style="margin:0;padding:0 0 0 1rem">
         <div class="ui sticky">
             <div class="ui divided items">
-<!--                <div class="item">-->
-<!--                    <table class="ui celled structured collapsing table">-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th colspan="2">Fila de Ações</th>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th>Transação</th>-->
-<!--                            <th>Ação</th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody id="fila">-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
+                <!--                <div class="item">-->
+                <!--                    <table class="ui celled structured collapsing table">-->
+                <!--                        <thead>-->
+                <!--                        <tr>-->
+                <!--                            <th colspan="2">Fila de Ações</th>-->
+                <!--                        </tr>-->
+                <!--                        <tr>-->
+                <!--                            <th>Transação</th>-->
+                <!--                            <th>Ação</th>-->
+                <!--                        </tr>-->
+                <!--                        </thead>-->
+                <!--                        <tbody id="fila">-->
+                <!--                        </tbody>-->
+                <!--                    </table>-->
+                <!--                </div>-->
 
                 <div class="item">
                     <table class="ui celled structured collapsing table">
@@ -151,7 +151,7 @@
 
                         <div class="field">
                             <button class="ui yellow button" id="btnRegistro">
-                                <i class="history icon"></i>Exibir Registro de Look
+                                <i class="history icon"></i>Exibir Registro de Locks
                             </button>
                         </div>
                     </div>
@@ -270,6 +270,24 @@
     <div class="actions">
         <div class="ui green approve icon button" id="btnCheck"><i class="ui check icon"></i></div>
         <div class="ui red cancel icon button"><i class="ui x icon icon"></i></div>
+    </div>
+</div>
+
+<div class="ui modal" id="modal_complete_locks">
+    <div class="header">Registro de Locks</div>
+    <div class="content">
+        <table class="ui celled table">
+            <thead>
+            <tr>
+                <th>Horário</th>
+                <th>Transações</th>
+                <th>Ação</th>
+                <th>Item</th>
+            </tr>
+            </thead>
+            <tbody id="complete_locks">
+            </tbody>
+        </table>
     </div>
 </div>
 

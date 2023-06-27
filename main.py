@@ -10,6 +10,10 @@ def get_locks():
     return data_item_lock_manager.get_locks()
 
 
+def get_complete_locks():
+    return data_item_lock_manager.get_complete_locks()
+
+
 def create_new_transaction():
     transaction_name = data_item_lock_manager.create_transaction_name()
     transacoes.get_new_transaction(transaction_name)

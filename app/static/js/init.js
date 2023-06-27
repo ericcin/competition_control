@@ -167,3 +167,26 @@ $('#btnResolverImpasse').click(function () {
         });
 
 });
+
+$('#btnRegistro').click(function () {
+
+    $.ajax({
+            method: 'POST',
+            url: '/get_complete_locks/',
+            success: function (resposta) {
+//                let resultado = JSON.parse(resposta)
+                  console.log(resposta);
+
+                  let complete_locks = '';
+                  for(i in resposta){
+                    r = resposta[i];
+                    complete_locks += '<tr><td>' + r[4].toUpperCase() + '</td><td>' + r[3] + '</td><td>' + r[1].toUpperCase()
+                    + '</td><td>' + r[0].toUpperCase() + '</td></tr>';
+                  }
+
+                  $('#complete_locks').html(complete_locks);
+                  $('#modal_complete_locks').modal('show');
+            },
+        });
+
+});

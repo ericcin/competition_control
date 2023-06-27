@@ -60,3 +60,8 @@ def solve_errors():
 @index.route("/get_locks/", methods=['POST'])
 def get_locks():
     return main.get_locks()
+
+
+@index.route("/get_complete_locks/", methods=['POST'])
+def get_complete_locks():
+    return main.get_complete_locks()
