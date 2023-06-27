@@ -48,7 +48,6 @@ $('#new_transaction').click(function () {
         url: '/new_transaction/',
         success: function (resposta) {
             let resultado = JSON.parse(resposta)
-            console.log(resultado['result'])
             let result = resultado['result'];
             $('#name_new_transation').html(result.toUpperCase());
             $('#sucesso').show();
@@ -121,14 +120,19 @@ function active_action () {
             success: function (resposta) {
                 let resultado = JSON.parse(resposta)
                 result = resultado['result']
-                console.log(result)
+//                console.log(result)
 
                 $("#log").val($("#log").val() + "\n" + result['text'])
 
                 if(result['value'] == true){
                     $('#log' + transaction).append(action + '(' + item.toUpperCase() +');\n' + calculo)
-                    if(action == 'read_lock' || action == 'write_lock' || action == 'unlock')
+                    if(action == 'read_lock' || action == 'write_lock')
                         update_locks();
+                    else if(action == 'unlock'){
+                        $('#' + item).html("");
+                        update_locks();
+                    }
+
                 }
 
             },
@@ -145,8 +149,7 @@ function update_locks () {
             url: '/get_locks/',
             success: function (resposta) {
                 for(i in resposta) {
-                    r = resposta[i]
-                    console.log(r[3]);
+                    r = resposta[i];
                     $('#' + r[0]).html(""+ r[3])
                 }
             },
@@ -174,13 +177,12 @@ $('#btnRegistro').click(function () {
             method: 'POST',
             url: '/get_complete_locks/',
             success: function (resposta) {
-//                let resultado = JSON.parse(resposta)
                   console.log(resposta);
 
                   let complete_locks = '';
                   for(i in resposta){
                     r = resposta[i];
-                    complete_locks += '<tr><td>' + r[4].toUpperCase() + '</td><td>' + r[3] + '</td><td>' + r[1].toUpperCase()
+                    complete_locks += '<tr><td>' + r[4] + '</td><td>' + r[3] + '</td><td>' + r[1].toUpperCase()
                     + '</td><td>' + r[0].toUpperCase() + '</td></tr>';
                   }
 
