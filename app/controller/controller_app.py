@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, request, json
 import main
 
 index = Blueprint("index", "competition controller", template_folder="view", static_folder="static")
-fase = True
 
 
 @index.route("/")
@@ -35,22 +34,19 @@ def realizar_acao():
     value1 = request.form['value1']
     operator = request.form['operator']
     value2 = request.form['value2']
-    global fase
 
-    if action == "read_lock" and fase:
+    if action == "read_lock":
         result = main.read_lock(item, transaction)
-    elif action == "read_item" and fase:
+    elif action == "read_item":
         result = main.read_item(transaction, item)
-    elif action == "write_lock" and fase:
+    elif action == "write_lock":
         result = main.write_lock(item, transaction)
-    elif action == "write_item" and fase:
+    elif action == "write_item":
         result = main.write_item(transaction, item, value1, value2, operator)
     elif action == "unlock":
         result = main.unlock(item, transaction)
-        fase = False
     else:
-        result = {'text': 'Fase de encolhimento, somente é possivel liberar bloqueios!', 'value': False}
-        return json.dumps({'status': 'Ok', 'result': result})
+        return json.dumps({'status': '400', 'result': ''})
 
     return json.dumps({'status': 'OK', 'result': result})
 
