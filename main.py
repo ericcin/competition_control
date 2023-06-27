@@ -21,61 +21,78 @@ def create_new_transaction():
 
 
 def write_lock(data_item, transaction):
-    return data_item_lock_manager.write_lock(data_item, transaction)
+    if transaction not in transacoes.get_shrinking():
+        return data_item_lock_manager.write_lock(data_item, transaction)
+    else:
+        return {'text': 'Transação ' + transaction + ' em fase de encolhimento, não é possivel realizar bloqueios',
+                'value': False}
 
 
 def read_lock(data_item, transaction):
-    return data_item_lock_manager.read_lock(data_item, transaction)
+    if transaction not in transacoes.get_shrinking():
+        return data_item_lock_manager.read_lock(data_item, transaction)
+    else:
+        return {'text': 'Transação ' + transaction + ' em fase de encolhimento, não é possivel realizar bloqueios',
+                'value': False}
 
 
 def unlock(data_item, transaction):
     output = data_item_lock_manager.unlock(data_item, transaction)
-    if output ['a']:
-        pass
+    if output['value']:
+        transacoes.add_shrinking(transaction)
     return output
 
+
 def read_item(transaction_name, item):
-    if data_item_lock_manager.can_read_item(transaction_name, item):
-        transacoes.read_item(transaction_name, item, data_item_lock_manager.data_items)
-        data_item_lock_manager.insert_in_complete_lock_register(item, 'read_item', 1, transaction_name)
-        return {'text': 'Leitura de item realizada no item ' + item + ' para a ' + transaction_name + '!',
-                'value': True}
+    if transaction_name not in transacoes.get_shrinking():
+        if data_item_lock_manager.can_read_item(transaction_name, item):
+            transacoes.read_item(transaction_name, item, data_item_lock_manager.data_items)
+            data_item_lock_manager.insert_in_complete_lock_register(item, 'read_item', 1, transaction_name)
+            return {'text': 'Leitura de item realizada no item ' + item + ' para a ' + transaction_name + '!',
+                    'value': True}
+        else:
+            data_item_lock_manager.get_error(item, transaction_name, 'read_item', 'write_lock', None, None)
+            return {
+                'text': 'Leitura de item não realizada, pois a ' + transaction_name + ' não possui bloqueio sobre o item ' +
+                        item + '!', 'value': False}
     else:
-        data_item_lock_manager.get_error(item, transaction_name, 'read_item', 'write_lock', None, None)
-        return {
-            'text': 'Leitura de item não realizada, pois a ' + transaction_name + ' não possui bloqueio sobre o item ' +
-                    item + '!', 'value': False}
+        return {'text': 'Transação ' + transaction_name + ' em fase de encolhimento, não é possivel realizar alterações',
+                'value': False}
 
 
 def write_item(transaction_name, item_to_be_changed, item_one, item_two, arithmetic_sign):
-    if not check_if_a_item_in_write_item_is_numeric(item_one) and not check_if_a_item_in_write_item_is_numeric(
+    if transaction_name not in transacoes.get_shrinking():
+        if not check_if_a_item_in_write_item_is_numeric(item_one) and not check_if_a_item_in_write_item_is_numeric(
+                item_two):
+            value = write_item_with_two_non_numeric_items(transaction_name, item_to_be_changed, item_one, item_two,
+                                                          arithmetic_sign)
+
+        if not check_if_a_item_in_write_item_is_numeric(item_one) and check_if_a_item_in_write_item_is_numeric(
+                item_two) or check_if_a_item_in_write_item_is_numeric(
+            item_one) and not check_if_a_item_in_write_item_is_numeric(
             item_two):
-        value = write_item_with_two_non_numeric_items(transaction_name, item_to_be_changed, item_one, item_two,
+            value = write_item_with_one_numeric_item(transaction_name, item_to_be_changed, item_one, item_two,
+                                                     arithmetic_sign)
+
+        if check_if_a_item_in_write_item_is_numeric(item_one) and check_if_a_item_in_write_item_is_numeric(item_two):
+            value = write_item_with_two_numeric_itens(transaction_name, item_to_be_changed, item_one, item_two,
                                                       arithmetic_sign)
 
-    if not check_if_a_item_in_write_item_is_numeric(item_one) and check_if_a_item_in_write_item_is_numeric(
-            item_two) or check_if_a_item_in_write_item_is_numeric(
-        item_one) and not check_if_a_item_in_write_item_is_numeric(
-        item_two):
-        value = write_item_with_one_numeric_item(transaction_name, item_to_be_changed, item_one, item_two,
-                                                 arithmetic_sign)
-
-    if check_if_a_item_in_write_item_is_numeric(item_one) and check_if_a_item_in_write_item_is_numeric(item_two):
-        value = write_item_with_two_numeric_itens(transaction_name, item_to_be_changed, item_one, item_two,
-                                                  arithmetic_sign)
-
-    if isinstance(value, int):
-        if data_item_lock_manager.write_item(transaction_name, item_to_be_changed, value):
-            transacoes.write_item(transaction_name, item_to_be_changed, value)
-            return {'text': 'Escrita de item feita no item ' + item_to_be_changed + 'para a ' + transaction_name + '!',
-                    'value': True}
+        if isinstance(value, int):
+            if data_item_lock_manager.write_item(transaction_name, item_to_be_changed, value):
+                transacoes.write_item(transaction_name, item_to_be_changed, value)
+                return {'text': 'Escrita de item feita no item ' + item_to_be_changed + 'para a ' + transaction_name + '!',
+                        'value': True}
+            else:
+                data_item_lock_manager.get_error(item_to_be_changed, transaction_name, 'write_item', 'write_lock', item_one,
+                                                 item_two)
+                return {'text': 'Escrita de item não realizada, pois a ' + transaction_name + \
+                                ' não possui bloqueio exclusivo sobre o item ' + item_to_be_changed + '!', 'value': False}
         else:
-            data_item_lock_manager.get_error(item_to_be_changed, transaction_name, 'write_item', 'write_lock', item_one,
-                                             item_two)
-            return {'text': 'Escrita de item não realizada, pois a ' + transaction_name + \
-                            ' não possui bloqueio exclusivo sobre o item ' + item_to_be_changed + '!', 'value': False}
+            return value
     else:
-        return value
+        return {'text': 'Transação ' + transaction_name + ' em fase de encolhimento, não é possivel realizar alterações',
+                'value': False}
 
 
 def write_item_with_two_non_numeric_items(transaction_name, item_to_be_changed, item_one, item_two, arithmetic_sign):
@@ -179,9 +196,11 @@ def solve_errors():
     if output_two != None:
         return output_two
 
+
 def solve_lock_errors():
     output_one = data_item_lock_manager.solve_error()
     return output_one
+
 
 def solve_write_and_read_item_errors():
     # [data_item, transaction, attempted_action, cause, item_one_in_write_item, item_two_in_write_item]
@@ -220,7 +239,8 @@ def solve_write_and_read_item_errors():
         output = ''
         for i in outputs:
             output = output + str(i) + '\n'
-        return{'text': output, 'value': True}
+        return {'text': output, 'value': True}
+
 
 def check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_changed, item):
     if transacoes.data_items_of_transactions_list[int(transaction_name[-1]) - 1][item] == \
@@ -229,8 +249,10 @@ def check_if_data_item_is_updated_in_transaction(transaction_name, item_to_be_ch
     else:
         return False
 
+
 def check_if_a_item_in_write_item_is_numeric(item):
     return item.isnumeric()
+
 
 def check_if_non_numeric_item_have_1_length(item):
     if not item.isdigit():

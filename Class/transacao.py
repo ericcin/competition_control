@@ -4,8 +4,8 @@ class transacao:
         self.data_items = {chave: 0 for chave in data_items_names_list}
         self.transactions_names = []
         self.data_items_of_transactions_list = []
-        self.crescimento = []
-        self.encolhimeto = []
+        self.shrinking = []
+
     def get_new_transaction(self, transaction_name):
         self.transactions_names.append(transaction_name)
         self.data_items_of_transactions_list.append(self.data_items)
@@ -19,6 +19,12 @@ class transacao:
 
     def get_transactions_names(self):
         return self.transactions_names
+
+    def add_shrinking(self, transaction):
+        self.shrinking.append(transaction)
+
+    def get_shrinking(self):
+        return self.shrinking
 
     # a logica principal que usarei nessa classe: os valores do data_items pra essa transacao é atualizada
     # logo depois é passado para o data_items do data_item_lock_manager, assim, caso em algum momento, alguma outra
