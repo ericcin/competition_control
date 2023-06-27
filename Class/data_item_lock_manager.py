@@ -99,7 +99,7 @@ class dataItemLockManager:
         self.complete_lock_register.append([data_item, lock, number_of_locks, [transaction], self.get_now_date_time()])
 
     def insert_unlock_in_complete_lock_register(self, data_item, transaction):
-        self.complete_lock_register.append([data_item, 'unlock', transaction, self.get_now_date_time()])
+        self.complete_lock_register.append([data_item, 'unlock', 0, transaction, self.get_now_date_time()])
 
     def alter_lock_register(self, transaction):
         self.lock_register[self.array_position][2] = self.lock_register[self.array_position][2] + 1
