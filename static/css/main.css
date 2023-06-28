@@ -101,6 +101,12 @@ textarea {
   background-color: white;
 }
 
+.fly {
+  margin: 10px 70px 70px;
+  padding: 10px;
+  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+}
+
 .main-interaction-container {
   margin: 0 auto;
   /* max-width: 90%; */
@@ -126,6 +132,51 @@ textarea {
 #dataItemTableContainer {
   flex-shrink: 0; /* Prevent shrinking of the container */
   overflow-y: auto; /* Enable vertical scroll if necessary */
+}
+
+/* Transactions */
+
+.transaction-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.transaction {
+  /* Transaction styles */
+}
+
+.transaction-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.operation-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.next-query {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  font-style: italic;
+}
+
+.lock-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.phase,
+.status {
+  margin-bottom: 5px;
+}
+
+.held-locks {
+  list-style: none;
+  padding-left: 0;
 }
 
 

@@ -39,13 +39,13 @@ app.debug = True
 toolbar = DebugToolbarExtension(app)
 
 
-@app.before_request
-def preprocess_request() -> None:
-    logger.debug(f"preprocess_request: request.method: {flask.request.method}")
-    logger.debug(f"preprocess_request: request.headers: {flask.request.headers}")
-    logger.debug(f"preprocess_request: request.path: {flask.request.path}")
-    logger.debug(f"preprocess_request: request.cookies: {flask.request.cookies}")
-    logger.debug(f"preprocess_request: request.get_data(): {flask.request.get_data()}")
+# @app.before_request
+# def preprocess_request() -> None:
+#     logger.debug(f"preprocess_request: request.method: {flask.request.method}")
+#     logger.debug(f"preprocess_request: request.headers: {flask.request.headers}")
+#     logger.debug(f"preprocess_request: request.path: {flask.request.path}")
+#     logger.debug(f"preprocess_request: request.cookies: {flask.request.cookies}")
+#     logger.debug(f"preprocess_request: request.get_data(): {flask.request.get_data()}")
 
 
 @app.route("/")
@@ -109,10 +109,11 @@ def transaction_manager():
     except Exception as e:
         error_message = f"transaction_manager: {str(e)}"
         result = {"error": error_message}
-    info_message(f"transaction_manager: result: {result}")
-    result_jsonified = flask.jsonify(result)
-    info_message(f"transaction_manager: result_jsonified: {result_jsonified}")
-    return result_jsonified
+    debug_message(f"/TransactionManager: result: {result}")
+    # result_jsonified = flask.jsonify(result)
+    # info_message(f"transaction_manager: result_jsonified: {result_jsonified}")
+    # return result_jsonified
+    return result
 
 
 def main() -> None:

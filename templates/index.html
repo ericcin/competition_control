@@ -3,7 +3,8 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Banco de Dados (IN9040) 2023.1, Projeto 2, Equipe 3: lgms, eafs3, ajfs @cin.ufpe.br - Controle de Concorrência</title>
+  <title>Banco de Dados (IN9040) 2023.1, Projeto 2, Equipe 3: lgms, eafs3, ajfs @cin.ufpe.br - Controle de Concorrência
+  </title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -24,7 +25,7 @@
 </head>
 
 <body>
-  <div id="main-app" class="table-wrapper">
+  <div id="main-app" class="fly">
     <div class="main-interaction-container" id="dataItemControlsContainer">
       <h1>Controle dos itens de dados</h1>
       <div class="main-interaction-row">
@@ -62,15 +63,77 @@
           <span id="transactionValidationMessage" style="color: red;"></span>
         </div>
         <div class="main-interaction-row">
-          <button id="initTransactionButton">Inserir transação</button>
+          <button id="insertTransactionButton">Inserir transação</button>
         </div>
         <hr>
         <div class="main-interaction-row">
           <button id="stepIntoTransactionButton">Step Into</button>
         </div>
-        <div class="main-interaction-row">
-          <div id="lockTableContainer" class="table-wrapper"></div>
+        <div class="transaction-container">
+          <div class="transaction">
+            <h2 class="transaction-name">Transaction Name</h2>
+            <ul class="operation-list">
+              <li>Operation 1</li>
+              <li>Operation 2</li>
+              <!-- More operations... -->
+            </ul>
+            <ul class="lock-list">
+              <li>Lock 1</li>
+              <li>Lock 2</li>
+              <!-- More locks... -->
+            </ul>
+            <p class="phase">Phase: Expanding</p>
+            <p class="status">Status: READY</p>
+            <ul class="held-locks">
+              <li>Held Lock 1</li>
+              <li>Held Lock 2</li>
+              <!-- More held locks... -->
+            </ul>
+          </div>
+          <div class="transaction">
+            <h2 class="transaction-name">Transaction Name</h2>
+            <ul class="operation-list">
+              <li>Operation 1</li>
+              <li>Operation 2</li>
+              <!-- More operations... -->
+            </ul>
+            <ul class="lock-list">
+              <li>Lock 1</li>
+              <li>Lock 2</li>
+              <!-- More locks... -->
+            </ul>
+            <p class="phase">Phase: Expanding</p>
+            <p class="status">Status: READY</p>
+            <ul class="held-locks">
+              <li>Held Lock 1</li>
+              <li>Held Lock 2</li>
+              <!-- More held locks... -->
+            </ul>
+          </div>
+          <div class="transaction">
+            <h2 class="transaction-name">Transaction Name</h2>
+            <ul class="operation-list">
+              <li>Operation 1</li>
+              <li>Operation 2</li>
+              <!-- More operations... -->
+            </ul>
+            <ul class="lock-list">
+              <li>Lock 1</li>
+              <li>Lock 2</li>
+              <!-- More locks... -->
+            </ul>
+            <p class="phase">Phase: Expanding</p>
+            <p class="status">Status: READY</p>
+            <ul class="held-locks">
+              <li>Held Lock 1</li>
+              <li>Held Lock 2</li>
+              <!-- More held locks... -->
+            </ul>
+          </div>
         </div>
+      </div>
+      <div class="main-interaction-row">
+        <div id="lockTableContainer" class="table-wrapper"></div>
       </div>
     </div>
   </div>

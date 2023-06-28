@@ -20,11 +20,11 @@ def get_lock_manager():
 
 def reset(message: Dict[str, Any]) -> Dict[str, Any]:
     global lock_manager
-    debug_message(
-        f"""lock_manager_dispatching: __init__:
-                inspect_type(message) = {inspect_type(message)},
-                message = {message}"""
-    )
+    # debug_message(
+    #     f"""lock_manager_dispatching: __init__:
+    #             inspect_type(message) = {inspect_type(message)},
+    #             message = {message}"""
+    # )
     try:
         data_items = message["data_items"]
         debug_message(f"data_items: {data_items}")
@@ -43,12 +43,12 @@ def init_lock_manager(message: List[str]) -> Dict[str, Any]:
 
 
 def list_data_items(message: Dict[str, Any]) -> Dict[str, Any]:
-    debug_message(f"list_data_items: message: {message}")
+    # debug_message(f"list_data_items: message: {message}")
     try:
         result = lock_manager.list_data_items()
     except Exception as e:
         result = {"error": f"list_data_items: {str(e)}"}
-    debug_message(f"list_data_items: result: {result}")
+    # debug_message(f"list_data_items: result: {result}")
     return result
 
 
@@ -57,7 +57,7 @@ def formatted_list_data_items(message: Dict[str, Any]) -> Dict[str, Any]:
         result = lock_manager.formatted_list_data_items()
     except Exception as e:
         result = {"error": f"formatted_list_data_items: {str(e)}"}
-    debug_message(f"result: {result}")
+    # debug_message(f"result: {result}")
     return result
 
 
@@ -118,7 +118,7 @@ def acquire_exclusive_lock(message):
 
 
 def lock_manager_dispatcher(method, message):
-    info_message(f"lock_manager_dispatcher: method = {method}")
+    # info_message(f"lock_manager_dispatcher: method = {method}")
     switch = {
         "reset": reset,
         "get_lock_status": get_lock_status,
@@ -132,9 +132,9 @@ def lock_manager_dispatcher(method, message):
         "formatted_list_data_items": formatted_list_data_items,
     }
     if method in switch:
-        debug_message(f"lock_manager_dispatcher: message: {message}")
+        # debug_message(f"lock_manager_dispatcher: message: {message}")
         result = switch[method](message)
     else:
         result = {"status": "error", "message": "Invalid method"}
-    debug_message(f"lock_manager_dispatcher: {result}")
+    # debug_message(f"lock_manager_dispatcher: {result}")
     return result
